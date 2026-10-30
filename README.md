@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2609.23466"><img src="https://img.shields.io/badge/arXiv-2609.23466-B31B1B?logo=arxiv&amp;logoColor=white" alt="Paper"></a>
-  <a href="https://quark-medical.github.io/rpmem/"><img src="https://img.shields.io/badge/Project-Page-146C70" alt="Project page"></a>
+  <a href="https://quark-medical.github.io/RPMem/"><img src="https://img.shields.io/badge/Project-Page-146C70" alt="Project page"></a>
   <a href="https://huggingface.co/datasets/PolarSnowLeopard/RPMem-data"><img src="https://img.shields.io/badge/Hugging_Face-Data-FFD21E?logo=huggingface&amp;logoColor=black" alt="Dataset"></a>
 </p>
 
