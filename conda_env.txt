@@ -1,0 +1,29 @@
+# RPMem conda environment (CPU / CUDA host side)
+# Ascend NPU training: keep torch_npu from the Ascend container image;
+# do NOT pip-install a conflicting torch into that image. Use scripts/env_rpmem_npu.sh
+# + scripts/setup_container_deps.sh inside the vc job instead.
+#
+# Create + activate (Python 3.10+):
+#   conda create -n rpmem python=3.10 -y
+#   conda activate rpmem
+#   pip install -U pip setuptools wheel
+#   pip install -r conda_env.txt
+#   pip install -e ".[train,experiments]"
+#
+# Optional CUDA PyTorch (pick one wheel index matching your CUDA):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+#
+# Verify:
+#   python -c "import torch, transformers, accelerate, rpmem; print(torch.__version__, transformers.__version__, rpmem.__version__)"
+
+numpy>=1.26,<3
+torch>=2.2
+transformers>=4.51,<5
+accelerate>=1.0
+tensorboard>=2.16
+pyarrow>=14
+PyYAML>=6
+huggingface-hub>=0.30
+safetensors
+sentencepiece
+protobuf
