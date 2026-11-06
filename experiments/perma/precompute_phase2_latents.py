@@ -10,6 +10,11 @@ import time
 from pathlib import Path
 
 import torch
+from rpmem.device import (
+    accelerator_available, empty_cache, max_memory_allocated,
+    memory_allocated, move_module_to_device, reset_peak_memory_stats,
+    resolve_device, synchronize,
+)
 from transformers import AutoTokenizer
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -51,8 +56,8 @@ def encode_segment(model: HypernetModel, tokenizer, segment, max_ctx_tokens: int
 
 
 def synchronize_device() -> None:
-    if torch.cuda.is_available():
-        torch.cuda.synchronize()
+    if accelerator_available():
+        synchronize()
 
 
 def cached_latent_is_valid(path: Path) -> bool:
@@ -150,7 +155,7 @@ def main() -> None:
         model.perceiver.to(hypernet_device)
         model.head.to(hypernet_device)
     else:
-        model.cuda()
+        model.to(resolve_device())
     for param in model.parameters():
         param.requires_grad = False
 
@@ -273,9 +278,9 @@ def main() -> None:
                 segment_metadata.append(metadata)
                 continue
             encode_baseline = 0
-            if torch.cuda.is_available():
-                torch.cuda.reset_peak_memory_stats()
-                encode_baseline = int(torch.cuda.memory_allocated())
+            if accelerator_available():
+                reset_peak_memory_stats()
+                encode_baseline = int(memory_allocated())
             synchronize_device()
             started = time.perf_counter()
             emb = encode_segment(
@@ -287,8 +292,8 @@ def main() -> None:
             synchronize_device()
             segment_encode_seconds = time.perf_counter() - started
             segment_peak_delta_bytes = (
-                max(0, int(torch.cuda.max_memory_allocated()) - encode_baseline)
-                if torch.cuda.is_available()
+                max(0, int(max_memory_allocated()) - encode_baseline)
+                if accelerator_available()
                 else 0
             )
             save_latent_atomic(emb, path)

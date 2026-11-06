@@ -67,8 +67,17 @@ def average_parameter_gradients(
             if not bucket:
                 return
             flat = torch.cat([gradient.reshape(-1) for gradient in bucket])
-            dist.all_reduce(flat, op=dist.ReduceOp.SUM)
-            flat.div_(world_size)
+            # HCCL on Ascend does not support float64 reductions.
+            reduce_dtype = (
+                torch.float32 if flat.dtype == torch.float64 else flat.dtype
+            )
+            flat_reduce = flat if flat.dtype == reduce_dtype else flat.to(reduce_dtype)
+            dist.all_reduce(flat_reduce, op=dist.ReduceOp.SUM)
+            flat_reduce.div_(world_size)
+            if flat_reduce.dtype != flat.dtype:
+                flat = flat_reduce.to(flat.dtype)
+            else:
+                flat = flat_reduce
             offset = 0
             for gradient in bucket:
                 size = gradient.numel()

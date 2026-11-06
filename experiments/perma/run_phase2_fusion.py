@@ -11,6 +11,11 @@ import time
 from pathlib import Path
 
 import torch
+from rpmem.device import (
+    accelerator_available, empty_cache, max_memory_allocated,
+    memory_allocated, move_module_to_device, reset_peak_memory_stats,
+    resolve_device, synchronize,
+)
 import torch.nn.functional as F
 from torch.optim import AdamW
 from transformers import AutoTokenizer
@@ -134,9 +139,8 @@ def load_embs(example: dict, device) -> list[torch.Tensor]:
 
 
 def synchronize_device() -> None:
-    if torch.cuda.is_available():
-        for device_index in range(torch.cuda.device_count()):
-            torch.cuda.synchronize(device_index)
+    if accelerator_available():
+        synchronize()
 
 
 def tensor_tree_bytes(value) -> int:
@@ -150,16 +154,16 @@ def tensor_tree_bytes(value) -> int:
 
 
 def reset_peak_memory() -> int:
-    if not torch.cuda.is_available():
+    if not accelerator_available():
         return 0
-    torch.cuda.reset_peak_memory_stats()
-    return int(torch.cuda.memory_allocated())
+    reset_peak_memory_stats()
+    return int(memory_allocated())
 
 
 def peak_memory_delta(baseline: int) -> int:
-    if not torch.cuda.is_available():
+    if not accelerator_available():
         return 0
-    return max(0, int(torch.cuda.max_memory_allocated()) - baseline)
+    return max(0, int(max_memory_allocated()) - baseline)
 
 
 def freeze_model(model: HypernetModel) -> None:
@@ -426,7 +430,7 @@ def load_phase2_model(args) -> HypernetModel:
         model.perceiver.to(hypernet_device)
         model.head.to(hypernet_device)
     else:
-        model.cuda()
+        model.to(resolve_device())
     freeze_model(model)
     return model
 
@@ -719,7 +723,7 @@ def main() -> None:
             completion_path=fold_marker,
         )
         fold_summaries.extend(completed)
-        torch.cuda.empty_cache()
+        empty_cache()
         print(
             f"[fold {fold_index}/{len(fold_users)}] user={test_user} complete",
             flush=True,

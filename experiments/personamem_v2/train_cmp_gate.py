@@ -11,6 +11,11 @@ import time
 from pathlib import Path
 
 import torch
+from rpmem.device import (
+    accelerator_available, empty_cache, max_memory_allocated,
+    memory_allocated, move_module_to_device, reset_peak_memory_stats,
+    resolve_device, synchronize,
+)
 import torch.nn.functional as F
 from torch.optim import AdamW
 from transformers import AutoTokenizer
@@ -179,7 +184,7 @@ def main() -> None:
         use_flash_attn=args.use_flash_attn,
         train=False,
     )
-    model.eval().cuda()
+    model.eval().to(resolve_device())
     for parameter in model.parameters():
         parameter.requires_grad = False
     tokenizer = AutoTokenizer.from_pretrained(

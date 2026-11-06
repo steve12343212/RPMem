@@ -14,6 +14,11 @@ REPO_ROOT = SCRIPT_DIR.parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
 import torch
+from rpmem.device import (
+    accelerator_available, empty_cache, max_memory_allocated,
+    memory_allocated, move_module_to_device, reset_peak_memory_stats,
+    resolve_device, synchronize,
+)
 from transformers import AutoTokenizer
 
 from experiments.personamem_v2.evaluation_utils import build_question_prompt, label_token_id, model_context_limit, option_label, render_prompt_ids
@@ -42,8 +47,8 @@ def source_example_user_ids(rows: list[dict]) -> dict[str, int]:
 
 
 def synchronize_device() -> None:
-    if torch.cuda.is_available():
-        torch.cuda.synchronize()
+    if accelerator_available():
+        synchronize()
 
 
 def percentile(values: list[float], quantile: float) -> float:
@@ -164,7 +169,7 @@ def main() -> None:
         str(checkpoint), use_flash_attn=args.use_flash_attn, train=False,
         base_model_path=args.base_model_path, ctx_encoder_path=args.ctx_encoder_path,
     )
-    model.eval().cuda()
+    model.eval().to(resolve_device())
     for parameter in model.parameters():
         parameter.requires_grad = False
     gate, gate_metadata = load_gate(
@@ -245,8 +250,8 @@ def main() -> None:
         context_stats = {"input_tokens": int(ids.shape[-1])}
 
         prompt_seconds = time.perf_counter() - prompt_started
-        baseline = int(torch.cuda.memory_allocated())
-        torch.cuda.reset_peak_memory_stats()
+        baseline = int(memory_allocated())
+        reset_peak_memory_stats()
         synchronize_device()
         query_started = time.perf_counter()
         with torch.inference_mode():
@@ -281,7 +286,7 @@ def main() -> None:
                 "prompt_build_seconds": prompt_seconds,
                 "query_forward_seconds": time.perf_counter() - query_started,
                 "query_peak_delta_bytes": max(
-                    0, int(torch.cuda.max_memory_allocated()) - baseline
+                    0, int(max_memory_allocated()) - baseline
                 ),
                 **context_stats,
                 **method_stats,

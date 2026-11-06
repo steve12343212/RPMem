@@ -96,9 +96,11 @@ class PerceiverAttention(nn.Module):
         self.v_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=False)
         self.o_proj = nn.Linear(self.num_heads * self.head_dim, self.hidden_size, bias=False)
         self.is_causal = False
+        # Flash-attn is CUDA-only; Ascend uses SDPA (see --no-use_flash_attn).
         self.use_flash_attn = (
             FLASH_ATTN_AVAILABLE
             and torch.cuda.is_available()
+            and not (hasattr(torch, "npu") and torch.npu.is_available())
             and os.getenv("RPMEM_PERCEIVER_FLASH_ATTN", os.getenv("MEMLORA_PERCEIVER_FLASH_ATTN", "0")) == "1"
         )
 
@@ -239,6 +241,7 @@ class PerceiverResampler(nn.Module):
         self.use_flash_attn = (
             FLASH_ATTN_AVAILABLE
             and torch.cuda.is_available()
+            and not (hasattr(torch, "npu") and torch.npu.is_available())
             and os.getenv("RPMEM_PERCEIVER_FLASH_ATTN", os.getenv("MEMLORA_PERCEIVER_FLASH_ATTN", "0")) == "1"
         )
 

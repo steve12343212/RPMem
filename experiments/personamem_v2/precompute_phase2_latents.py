@@ -9,6 +9,11 @@ import time
 from pathlib import Path
 
 import torch
+from rpmem.device import (
+    accelerator_available, empty_cache, max_memory_allocated,
+    memory_allocated, move_module_to_device, reset_peak_memory_stats,
+    resolve_device, synchronize,
+)
 from transformers import AutoTokenizer
 
 from evaluation_utils import history_cache_key
@@ -23,8 +28,8 @@ from personamem_segments import segment_history_memory
 
 
 def synchronize_device() -> None:
-    if torch.cuda.is_available():
-        torch.cuda.synchronize()
+    if accelerator_available():
+        synchronize()
 
 
 def cached_latent_is_valid(path: Path) -> bool:
@@ -128,7 +133,7 @@ def main() -> None:
         use_flash_attn=args.use_flash_attn,
         train=False,
     )
-    model.eval().cuda()
+    model.eval().to(resolve_device())
     for parameter in model.parameters():
         parameter.requires_grad = False
     tokenizer = AutoTokenizer.from_pretrained(model.config.ctx_encoder_model_name)
@@ -181,8 +186,8 @@ def main() -> None:
                 }
                 reused_segments += 1
             else:
-                baseline = int(torch.cuda.memory_allocated())
-                torch.cuda.reset_peak_memory_stats()
+                baseline = int(memory_allocated())
+                reset_peak_memory_stats()
                 synchronize_device()
                 started = time.perf_counter()
                 latent = encode_segment(
@@ -194,7 +199,7 @@ def main() -> None:
                 item["performance"] = {
                     "context_encode_seconds": elapsed,
                     "context_encode_peak_delta_bytes": max(
-                        0, int(torch.cuda.max_memory_allocated()) - baseline
+                        0, int(max_memory_allocated()) - baseline
                     ),
                     "latent_bytes": latent.numel() * latent.element_size(),
                     "cache_reused_this_run": False,

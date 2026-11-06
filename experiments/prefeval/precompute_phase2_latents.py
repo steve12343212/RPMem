@@ -13,6 +13,11 @@ REPO_ROOT = SCRIPT_DIR.parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
 import torch
+from rpmem.device import (
+    accelerator_available, empty_cache, max_memory_allocated,
+    memory_allocated, move_module_to_device, reset_peak_memory_stats,
+    resolve_device, synchronize,
+)
 from transformers import AutoTokenizer
 
 from experiments.prefeval.formal_contract import LATENT_FORMAT, PHASE1_METHOD, segmentation_contract
@@ -22,8 +27,8 @@ from rpmem.training.hypernet_model import HypernetModel
 
 
 def synchronize_device() -> None:
-    if torch.cuda.is_available():
-        torch.cuda.synchronize()
+    if accelerator_available():
+        synchronize()
 
 
 def cached_tensor_valid(path: Path) -> bool:
@@ -119,7 +124,7 @@ def main() -> None:
         str(checkpoint), use_flash_attn=args.use_flash_attn, train=False,
         base_model_path=args.base_model_path, ctx_encoder_path=args.ctx_encoder_path,
     )
-    model.eval().cuda()
+    model.eval().to(resolve_device())
     for parameter in model.parameters():
         parameter.requires_grad = False
     tokenizer = AutoTokenizer.from_pretrained(model.config.ctx_encoder_model_name)

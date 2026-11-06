@@ -87,8 +87,11 @@ class HyperLoRAHead(nn.Module):
         lora_emb: [bs, n_layers, n_modules, r, d_latent]
         returns: {module_name: {"A": [bs, n_layers, r, d_in], "B": [bs, n_layers, r, d_out]}}
         """
-        with torch.autocast(device_type=lora_emb.device.type, dtype=torch.bfloat16,
-                            enabled=lora_emb.device.type == "cuda"):
+        with torch.autocast(
+            device_type=lora_emb.device.type,
+            dtype=torch.bfloat16,
+            enabled=lora_emb.device.type in ("cuda", "npu"),
+        ):
             h = self.layers(lora_emb)
             norm = torch.norm(h, dim=-1, keepdim=True)
             h = h / norm

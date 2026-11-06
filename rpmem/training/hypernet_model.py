@@ -636,7 +636,9 @@ class HypernetModel(nn.Module):
             raise ValueError("cached context features must be detached")
 
         # Perceiver is trainable in phase 1 and frozen explicitly by phase-2 code.
-        with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+        from rpmem.device import autocast_context
+
+        with autocast_context(ctx_features.device, dtype=torch.bfloat16):
             lora_emb, _ = self.perceiver(ctx_features, ctx_attn_mask, ctx_position_ids)
         return lora_emb
 
@@ -1280,13 +1282,11 @@ class HypernetModel(nn.Module):
         prompt_attention_mask: Tensor,
         seed: int,
     ) -> Tensor:
-        devices = []
-        if prompt_ids.device.type == "cuda":
-            devices = [prompt_ids.device.index]
+        from rpmem.device import fork_rng_devices, manual_seed_for_device
+
+        devices = fork_rng_devices(prompt_ids.device)
         with torch.random.fork_rng(devices=devices):
-            torch.manual_seed(seed)
-            if prompt_ids.device.type == "cuda":
-                torch.cuda.manual_seed(seed)
+            manual_seed_for_device(seed, prompt_ids.device)
             with torch.no_grad():
                 generated = self.base_model.generate(
                     input_ids=prompt_ids,

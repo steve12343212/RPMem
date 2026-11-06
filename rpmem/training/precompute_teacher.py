@@ -38,6 +38,11 @@ from rpmem.training.data import (
 )
 from rpmem.training.logit_projection import response_position_logits
 from rpmem.training.sample_store import open_sample_store
+from rpmem.training.teacher_kv_cache import (
+    longest_common_prefix_len,
+    prefill_shared_prefix,
+    response_logits_with_prefix_kv,
+)
 from rpmem.training.teacher_shards import (
     TeacherShardWriter,
     TeacherTopKRecord,
@@ -136,7 +141,151 @@ def parse_args():
         action="store_true",
         help="Delete and recompute files owned by this shard",
     )
+    parser.add_argument(
+        "--reuse_context_kv",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help=(
+            "Optional fast path: prefill the longest common token prefix once "
+            "per sample and reuse past_key_values for each prompt/response. "
+            "Default off so existing jobs are unchanged."
+        ),
+    )
+    parser.add_argument(
+        "--kv_min_prefix_len",
+        type=int,
+        default=64,
+        help="Minimum shared prefix length required to enable KV reuse for a sample",
+    )
+    parser.add_argument(
+        "--max_samples",
+        type=int,
+        default=None,
+        help="Optional cap on samples processed by this shard (after shard stride)",
+    )
     return parser.parse_args()
+
+
+def _tokenize_pairs_for_sample(
+    sample: dict,
+    *,
+    ctx_text: str,
+    tokenizer,
+    max_seq_len: int,
+    max_teacher_seq_len: int,
+    ctx_prompt_sep: str,
+) -> list[tuple[list[int], list[int]]]:
+    pairs: list[tuple[list[int], list[int]]] = []
+    for prompt_text, response_text in iter_prompt_response_pairs(sample):
+        input_ids_list, label_positions = tokenize_teacher_aligned_to_student(
+            prompt_text,
+            response_text,
+            tokenizer,
+            max_seq_len,
+            max_teacher_seq_len,
+            context_text=ctx_text,
+            ctx_prompt_sep=ctx_prompt_sep,
+            system_message=str(sample.get("system_message", "")),
+        )
+        if label_positions:
+            pairs.append((input_ids_list, label_positions))
+    return pairs
+
+
+def _topk_from_logits(resp_logits: torch.Tensor, top_k: int):
+    logprobs = torch.log_softmax(resp_logits.float(), dim=-1)
+    vals, topk_idx = logprobs.topk(top_k, dim=-1)
+    return vals.cpu().to(torch.float16), topk_idx.cpu().to(torch.int32)
+
+
+def _compute_pair_full_forward(
+    model,
+    *,
+    input_ids_list: list[int],
+    label_positions: list[int],
+    device,
+    top_k: int,
+) -> tuple[torch.Tensor, torch.Tensor, bool]:
+    input_ids = torch.tensor([input_ids_list], dtype=torch.long, device=device)
+    label_positions_tensor = torch.tensor(
+        label_positions, device=device, dtype=torch.long
+    )
+    with torch.inference_mode():
+        resp_logits, model_side_projection = response_position_logits(
+            model,
+            input_ids,
+            label_positions_tensor,
+            use_cache=False,
+        )
+    vals, topk_idx = _topk_from_logits(resp_logits, top_k)
+    return vals, topk_idx, bool(model_side_projection)
+
+
+def _compute_sample_with_optional_kv(
+    model,
+    *,
+    pairs: list[tuple[list[int], list[int]]],
+    device,
+    top_k: int,
+    reuse_context_kv: bool,
+    kv_min_prefix_len: int,
+) -> tuple[list[torch.Tensor], list[torch.Tensor], str, int]:
+    """Return (vals_parts, idx_parts, mode, prefix_len)."""
+
+    if not pairs:
+        return [], [], "empty", 0
+
+    if not reuse_context_kv or len(pairs) == 1:
+        vals_parts: list[torch.Tensor] = []
+        idx_parts: list[torch.Tensor] = []
+        model_side = False
+        for input_ids_list, label_positions in pairs:
+            vals, topk_idx, side = _compute_pair_full_forward(
+                model,
+                input_ids_list=input_ids_list,
+                label_positions=label_positions,
+                device=device,
+                top_k=top_k,
+            )
+            vals_parts.append(vals)
+            idx_parts.append(topk_idx)
+            model_side = model_side or side
+        mode = "full_forward_model_side" if model_side else "full_forward"
+        return vals_parts, idx_parts, mode, 0
+
+    prefix_len = longest_common_prefix_len([ids for ids, _ in pairs])
+    if prefix_len < kv_min_prefix_len:
+        vals_parts, idx_parts, mode, _ = _compute_sample_with_optional_kv(
+            model,
+            pairs=pairs,
+            device=device,
+            top_k=top_k,
+            reuse_context_kv=False,
+            kv_min_prefix_len=kv_min_prefix_len,
+        )
+        return vals_parts, idx_parts, f"full_forward_short_prefix({prefix_len})", prefix_len
+
+    prefix_ids = pairs[0][0][:prefix_len]
+    past_key_values, prefill_logits = prefill_shared_prefix(
+        model, prefix_ids=prefix_ids, device=device
+    )
+
+    vals_parts = []
+    idx_parts = []
+    for input_ids_list, label_positions in pairs:
+        resp_logits = response_logits_with_prefix_kv(
+            model,
+            full_input_ids=input_ids_list,
+            label_positions=label_positions,
+            prefix_len=prefix_len,
+            past_key_values=past_key_values,
+            prefill_logits=prefill_logits,
+            device=device,
+        )
+        vals, topk_idx = _topk_from_logits(resp_logits, top_k)
+        vals_parts.append(vals)
+        idx_parts.append(topk_idx)
+    return vals_parts, idx_parts, f"prefix_kv({prefix_len})", prefix_len
 
 
 def main():
@@ -184,6 +333,8 @@ def main():
         "num_shards": args.num_shards,
         "records_per_file": args.records_per_file,
         "rows_per_group": args.rows_per_group,
+        "reuse_context_kv": bool(args.reuse_context_kv),
+        "kv_min_prefix_len": int(args.kv_min_prefix_len),
     }
     write_store_metadata(out_dir, meta)
 
@@ -194,15 +345,32 @@ def main():
         args.base_model_path,
         use_flash_attn=args.use_flash_attn,
     )
-    model.eval().cuda()
+    from rpmem.device import resolve_device
+
+    device = resolve_device()
+    model.eval().to(device)
     model.requires_grad_(False)
 
-    indices = range(args.shard_id, len(samples), args.num_shards)
-    logger.info(f"Shard {args.shard_id}/{args.num_shards}: {len(indices)} samples")
+    indices = list(range(args.shard_id, len(samples), args.num_shards))
+    if args.max_samples is not None:
+        if args.max_samples <= 0:
+            raise ValueError("--max_samples must be positive")
+        indices = indices[: args.max_samples]
+    logger.info(
+        "Shard %d/%d: %d samples (reuse_context_kv=%s, kv_min_prefix_len=%d, max_samples=%s)",
+        args.shard_id,
+        args.num_shards,
+        len(indices),
+        args.reuse_context_kv,
+        args.kv_min_prefix_len,
+        args.max_samples,
+    )
 
     t0 = time.time()
     n_done, n_skipped = 0, 0
-    projection_mode_logged = False
+    mode_logged = False
+    prefix_len_sum = 0
+    prefix_len_count = 0
     with TeacherShardWriter(
         out_dir,
         shard_id=args.shard_id,
@@ -224,48 +392,28 @@ def main():
                     ctx_tokens[: args.max_teacher_ctx_tokens], skip_special_tokens=True
                 )
 
-            vals_parts = []
-            idx_parts = []
-            for prompt_text, response_text in iter_prompt_response_pairs(sample):
-                input_ids_list, label_positions = tokenize_teacher_aligned_to_student(
-                    prompt_text,
-                    response_text,
-                    tokenizer,
-                    args.max_seq_len,
-                    max_teacher_seq_len,
-                    context_text=ctx_text,
-                    ctx_prompt_sep=args.ctx_prompt_sep,
-                    system_message=str(sample.get("system_message", "")),
-                )
-                if not label_positions:
-                    continue
-
-                input_ids = torch.tensor(
-                    [input_ids_list], dtype=torch.long, device="cuda"
-                )
-                label_positions_tensor = torch.tensor(
-                    label_positions, device="cuda", dtype=torch.long
-                )
-                with torch.inference_mode():
-                    resp_logits, model_side_projection = response_position_logits(
-                        model,
-                        input_ids,
-                        label_positions_tensor,
-                        use_cache=False,
-                    )
-                    resp_logits = resp_logits.float()
-                if not projection_mode_logged:
-                    logger.info(
-                        "Teacher vocabulary projection: %s",
-                        "response positions only (model-side)"
-                        if model_side_projection
-                        else "full logits fallback",
-                    )
-                    projection_mode_logged = True
-                logprobs = torch.log_softmax(resp_logits, dim=-1)
-                vals, topk_idx = logprobs.topk(args.top_k, dim=-1)
-                vals_parts.append(vals.cpu().to(torch.float16))
-                idx_parts.append(topk_idx.cpu().to(torch.int32))
+            pairs = _tokenize_pairs_for_sample(
+                sample,
+                ctx_text=ctx_text,
+                tokenizer=tokenizer,
+                max_seq_len=args.max_seq_len,
+                max_teacher_seq_len=max_teacher_seq_len,
+                ctx_prompt_sep=args.ctx_prompt_sep,
+            )
+            vals_parts, idx_parts, mode, prefix_len = _compute_sample_with_optional_kv(
+                model,
+                pairs=pairs,
+                device=device,
+                top_k=args.top_k,
+                reuse_context_kv=args.reuse_context_kv,
+                kv_min_prefix_len=args.kv_min_prefix_len,
+            )
+            if not mode_logged:
+                logger.info("Teacher compute mode (first sample): %s", mode)
+                mode_logged = True
+            if prefix_len > 0:
+                prefix_len_sum += prefix_len
+                prefix_len_count += 1
 
             if vals_parts:
                 vals = torch.cat(vals_parts, dim=0).numpy()
@@ -288,9 +436,13 @@ def main():
                 visited = n + 1
                 rate = visited / max(elapsed, 1e-6)
                 eta = (len(indices) - visited) / max(rate, 1e-6) / 60
+                avg_prefix = (
+                    prefix_len_sum / prefix_len_count if prefix_len_count else 0.0
+                )
                 logger.info(
                     f"[{visited}/{len(indices)}] {rate:.1f} samples/s, "
-                    f"computed={n_done}, skipped={n_skipped}, ETA {eta:.0f} min"
+                    f"computed={n_done}, skipped={n_skipped}, "
+                    f"avg_kv_prefix={avg_prefix:.0f}, ETA {eta:.0f} min"
                 )
 
     logger.info(

@@ -616,15 +616,25 @@ class LocalTransformersProvider:
         self.tokenizer.padding_side = "left"
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
+        from rpmem.device import resolve_device
+
+        attn_impl = "flash_attention_2"
+        try:
+            import torch_npu  # noqa: F401
+
+            if torch.npu.is_available():
+                attn_impl = "sdpa"
+        except Exception:
+            pass
         self.model = (
             AutoModelForCausalLM.from_pretrained(
                 model_path,
                 dtype=torch.bfloat16,
-                attn_implementation="flash_attention_2",
+                attn_implementation=attn_impl,
                 trust_remote_code=True,
             )
             .eval()
-            .cuda()
+            .to(resolve_device())
         )
         if temperature == 0:
             self.model.generation_config.temperature = None
@@ -682,8 +692,10 @@ class LocalTransformersProvider:
         output = None
         generated = None
         try:
+            from rpmem.device import resolve_device
+
             inputs = self.tokenizer(prompts, return_tensors="pt", padding=True).to(
-                "cuda"
+                resolve_device()
             )
             with self.torch.inference_mode():
                 generation_kwargs = {
@@ -759,8 +771,10 @@ class LocalTransformersProvider:
         return self.generate_batch([session], target_probes, attempt=attempt)[0]
 
     def recover(self) -> None:
+        from rpmem.device import empty_cache
+
         gc.collect()
-        self.torch.cuda.empty_cache()
+        empty_cache()
 
     def stats(self) -> dict[str, Any]:
         return {

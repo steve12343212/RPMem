@@ -27,3 +27,6 @@ outputs/
 data/
 artifacts/
 third_party/
+logs/
+fusion_result.json
+*.JOB.log

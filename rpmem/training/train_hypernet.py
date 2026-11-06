@@ -662,8 +662,10 @@ def main(argv=None, *, opcd_backend_factory=None):
             raise RuntimeError(
                 "distributed training requires a compatible Accelerate install"
             ) from exc
+        from rpmem.device import resolve_device
+
         use_accelerate = False
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = resolve_device()
         logger.info(f"Accelerate not available, using device: {device}")
 
     is_main = (not use_accelerate) or accelerator.is_main_process
@@ -820,10 +822,12 @@ def main(argv=None, *, opcd_backend_factory=None):
         model.ctx_encoder.to(device)
         model.perceiver.to(device)
         model.head.to(device)
+        from rpmem.device import device_count
+
         logger.info(
-            "Frozen backbone device map: %s (%d visible GPUs)",
+            "Frozen backbone device map: %s (%d visible accelerators)",
             args.base_model_device_map,
-            torch.cuda.device_count(),
+            device_count(),
         )
         if args.model_parallel_data_parallel:
             logger.info(
@@ -965,21 +969,25 @@ def main(argv=None, *, opcd_backend_factory=None):
     from rpmem.training.sampling import DataLoaderPosition
 
     def capture_rng_state():
+        from rpmem.device import get_rng_state
+
         return {
             "python": random.getstate(),
             "numpy": np.random.get_state(),
             "torch": torch.get_rng_state(),
-            "cuda": torch.cuda.get_rng_state(device)
-            if torch.cuda.is_available()
-            else None,
+            "accelerator": get_rng_state(device),
+            # Legacy key retained for older CUDA resumes.
+            "cuda": get_rng_state(device),
         }
 
     def restore_rng_state(state):
+        from rpmem.device import set_rng_state
+
         random.setstate(state["python"])
         np.random.set_state(state["numpy"])
         torch.set_rng_state(state["torch"])
-        if torch.cuda.is_available() and state.get("cuda") is not None:
-            torch.cuda.set_rng_state(state["cuda"], device=device)
+        accel_state = state.get("accelerator", state.get("cuda"))
+        set_rng_state(accel_state, device)
 
     resume_global_step = 0
     resume_rng_state = None
@@ -1193,10 +1201,11 @@ def main(argv=None, *, opcd_backend_factory=None):
         values = [loss_sum, float(loss_count)]
         values.extend(metric_sums[key] for key in keys)
         values.extend(float(metric_counts[key]) for key in keys)
-        reduced = torch.tensor(values, dtype=torch.float64, device=device)
+        # Ascend HCCL rejects float64 allreduce; keep fp32 for metric sync.
+        reduced = torch.tensor(values, dtype=torch.float32, device=device)
         if use_accelerate:
             reduced = accelerator.reduce(reduced, reduction="sum")
-        reduced_values = reduced.cpu().tolist()
+        reduced_values = reduced.detach().cpu().tolist()
         global_loss = reduced_values[0] / max(reduced_values[1], 1.0)
         metric_offset = 2
         count_offset = metric_offset + len(keys)
@@ -1483,12 +1492,12 @@ def main(argv=None, *, opcd_backend_factory=None):
             )
             quality_values = torch.tensor(
                 quality_stats.raw_values() + [float(quality_session_count)],
-                dtype=torch.float64,
+                dtype=torch.float32,
                 device=device,
             )
             if use_accelerate:
                 quality_values = accelerator.reduce(quality_values, reduction="sum")
-            quality_values = quality_values.cpu().tolist()
+            quality_values = quality_values.detach().cpu().tolist()
             quality_stats = GenerationQualityStats.from_raw_values(quality_values[:-1])
             quality_metrics = quality_stats.metrics()
             if quality_metrics:
@@ -1785,22 +1794,14 @@ def main(argv=None, *, opcd_backend_factory=None):
         final_path = f"{args.output_dir}/pytorch_model.bin"
         unwrapped = accelerator.unwrap_model(model) if use_accelerate else model
         unwrapped.save_checkpoint(final_path)
-        if torch.cuda.is_available():
-            for index in range(torch.cuda.device_count()):
-                torch.cuda.synchronize(index)
-            memory_profile = {
-                "format": "memlora_training_cuda_memory_v1",
-                "base_model_device_map": args.base_model_device_map,
-                "devices": [
-                    {
-                        "index": index,
-                        "name": torch.cuda.get_device_name(index),
-                        "peak_allocated_bytes": torch.cuda.max_memory_allocated(index),
-                        "peak_reserved_bytes": torch.cuda.max_memory_reserved(index),
-                    }
-                    for index in range(torch.cuda.device_count())
-                ],
-            }
+        from rpmem.device import accelerator_available, accelerator_memory_profile
+
+        if accelerator_available():
+            memory_profile = accelerator_memory_profile(args.base_model_device_map)
+            Path(args.output_dir, "accelerator_memory.json").write_text(
+                json.dumps(memory_profile, indent=2, sort_keys=True) + "\n"
+            )
+            # Keep CUDA filename for older tooling that expects it.
             Path(args.output_dir, "cuda_memory.json").write_text(
                 json.dumps(memory_profile, indent=2, sort_keys=True) + "\n"
             )

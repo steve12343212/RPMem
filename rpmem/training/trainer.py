@@ -51,8 +51,10 @@ class CMPTrainer:
         lr: float = 1e-3,
         weight_decay: float = 0.01,
         max_grad_norm: float = 1.0,
-        device: str = "cuda",
+        device: str | None = None,
     ):
+        from rpmem.device import resolve_device
+
         self.base_model = base_model
         self.head = head
         self.gate = gate
@@ -62,7 +64,7 @@ class CMPTrainer:
         self.lora_alpha = lora_alpha
         self.use_bias = use_bias
         self.max_grad_norm = max_grad_norm
-        self.device = device
+        self.device = resolve_device(device)
         self.base_model.requires_grad_(False)
         self.head.requires_grad_(False)
         self.gate.requires_grad_(True)
@@ -142,7 +144,9 @@ class CMPTrainer:
             self.optimizer_updates += 1
             if self._scheduler:
                 self._scheduler.step()
-        torch.cuda.empty_cache()
+        from rpmem.device import empty_cache
+
+        empty_cache()
 
         return loss.item()
 
@@ -211,7 +215,9 @@ class CMPTrainer:
                 for k, v in metrics.items():
                     all_metrics[k] = all_metrics.get(k, 0) + v
 
-            torch.cuda.empty_cache()
+            from rpmem.device import empty_cache
+
+            empty_cache()
 
         result = {"loss": total_loss / max(n, 1), "n_samples": n}
         result.update(all_metrics)

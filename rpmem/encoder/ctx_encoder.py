@@ -5,7 +5,36 @@ from typing import Optional
 import torch
 import torch.nn as nn
 from torch import Tensor
-from transformers import AutoModel
+from transformers import AutoConfig, AutoModel
+
+
+def _load_encoder_backbone(model_name_or_path: str):
+    """Load HF encoder without flash-attn2.
+
+    ModernBERT defaults to flash_attention_2 when transformers thinks FA2 can
+    dispatch. On Ascend, FA2 is often a false positive and
+    ``ModernBertUnpaddedRotaryEmbedding`` then subclasses ``object``, which
+    crashes at init. Prefer SDPA, then eager.
+    """
+    last_error: Exception | None = None
+    for attn_implementation in ("sdpa", "eager"):
+        try:
+            config = AutoConfig.from_pretrained(
+                model_name_or_path, trust_remote_code=True
+            )
+            if hasattr(config, "reference_compile"):
+                config.reference_compile = False
+            return AutoModel.from_pretrained(
+                model_name_or_path,
+                config=config,
+                attn_implementation=attn_implementation,
+                trust_remote_code=True,
+            )
+        except Exception as exc:  # noqa: BLE001 - fall through to next backend
+            last_error = exc
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError(f"failed to load encoder backbone: {model_name_or_path}")
 
 
 class PerLayerActivations(nn.Module):
@@ -21,9 +50,7 @@ class PerLayerActivations(nn.Module):
         max_length: int = 8192,
     ):
         super().__init__()
-        self.base_model = AutoModel.from_pretrained(
-            model_name_or_path, trust_remote_code=True
-        )
+        self.base_model = _load_encoder_backbone(model_name_or_path)
         self.model_name_or_path = model_name_or_path
         self.num_target_layers = num_target_layers
         self.max_length = max_length

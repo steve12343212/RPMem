@@ -19,13 +19,16 @@ def main():
     parser.add_argument("--max-context-tokens", type=int, default=4096)
     parser.add_argument("--max-new-tokens", type=int, default=128)
     args = parser.parse_args()
-    if not torch.cuda.is_available():
-        raise RuntimeError("This pretrained-model example requires a CUDA GPU.")
+    from rpmem.device import accelerator_available, resolve_device
+
+    if not accelerator_available():
+        raise RuntimeError("This pretrained-model example requires an NPU or CUDA GPU.")
     if args.max_context_tokens < 1 or args.max_new_tokens < 1:
         parser.error("token limits must be positive")
+    device = resolve_device()
     model = RPMemModel.from_checkpoint(
         args.checkpoint, base_model_path=args.base_model, use_flash_attn=False,
-        ctx_encoder_path=args.ctx_encoder, gate_ckpt_path=args.gate, device="cuda",
+        ctx_encoder_path=args.ctx_encoder, gate_ckpt_path=args.gate, device=str(device),
     ).requires_grad_(False)
     memory = None
     with torch.no_grad():

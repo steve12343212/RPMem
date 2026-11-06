@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from contextlib import nullcontext
 from typing import Optional
 
 import torch
@@ -12,6 +11,7 @@ from transformers import AutoTokenizer
 
 from rpmem.checkpoint.loader import load_gate_checkpoint
 from rpmem.config import RPMemConfig
+from rpmem.device import autocast_context, resolve_device
 from rpmem.encoder.ctx_encoder import PerLayerActivations
 from rpmem.encoder.perceiver import Perceiver
 from rpmem.gate import CMPGate, run_cmp_sessions
@@ -55,7 +55,7 @@ class RPMemModel(nn.Module):
         cls,
         checkpoint_path: str,
         gate_ckpt_path: Optional[str] = None,
-        device: str = "cuda",
+        device: Optional[str] = None,
         use_flash_attn: bool = True,
         base_model_path: Optional[str] = None,
         ctx_encoder_path: Optional[str] = None,
@@ -67,6 +67,7 @@ class RPMemModel(nn.Module):
         Path overrides support checkpoints produced on another machine.
         Fresh gates default to direct initialization. Saved gates restore their
         recorded rule (legacy zero-state if absent); an explicit rule must match.
+        Device defaults to NPU when available, else CUDA, else CPU.
         """
         from rpmem.training.hypernet_model import HypernetModel
 
@@ -88,7 +89,7 @@ class RPMemModel(nn.Module):
             config, compiler.base_model, compiler.ctx_encoder,
             compiler.perceiver, compiler.head, gate,
         )
-        return model.to(device).eval()
+        return model.to(resolve_device(device)).eval()
 
     def get_tokenizer(self):
         if self._tokenizer is None:
@@ -120,11 +121,7 @@ class RPMemModel(nn.Module):
         input_ids = torch.tensor([tokens], device=self.device)
         attn_mask = torch.ones_like(input_ids)
 
-        autocast = (
-            torch.autocast(device_type="cuda", dtype=torch.bfloat16)
-            if self.device.type == "cuda" else nullcontext()
-        )
-        with autocast:
+        with autocast_context(self.device, dtype=torch.bfloat16):
             ctx_features = self.ctx_encoder(input_ids=input_ids, attention_mask=attn_mask)
             lora_emb, _ = self.perceiver(ctx_features, attn_mask, None)
 
