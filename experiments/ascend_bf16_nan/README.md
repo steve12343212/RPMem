@@ -53,6 +53,17 @@ Run `rpmem_kv_20k_1npu_nan_probe` with `--nan_probe` from step 0.
 
 This supports backward-first NaN gradients rather than a fixed loss≈0.6 threshold or an immediately corrupt teacher forward.
 
+## Per-microbatch probe + boundary hooks (`nan_probe_s53`)
+
+Follow-up with probe after every `accelerator.backward`, `NAN_PROBE_START_STEP=53`, and hooks on `student_logits` / LoRA A/B / `lora_emb`.
+
+- Saved `checkpoint-53` (local only; not in git), then instrumented the next accum window `12027 → 16890`.
+- micro 106 (`12027`): after_backward **finite** (params + all boundary grads).
+- micro 107 (`16890`): forward finite; after_backward `perceiver.modality_projection.gate_proj.weight.grad` all NaN; **boundary grads still finite**.
+- Artifacts: `nan_probe_s53/` (`nan_probe.jsonl`, `nan_probe_stop/first_bad_grad.json`, `train.log`, `args.yaml`).
+
+Implication: first bad sample in this window is `16890`; FKL and HyperLoRA head are not the first-fault site; NaN appears inside Perceiver backward (`lora_emb` → `modality_projection`).
+
 ## Current hypothesis
 
-Primary issue is numerical instability of **bf16 Fixed-FKL on Ascend** once the student approaches teacher (loss ~0.6), not multi-NPU communication alone. Next levers: fp32 critical path for FKL/logits, lower LR, stronger clipping, or NaN-skip/rollback.
+Primary issue is numerical instability on the **Perceiver backward** path under Ascend bf16 for sample `16890` at step-53 weights—not FKL loss or HyperLoRA head first. Next levers: single-sample replay from `checkpoint-53`, deeper Perceiver hooks, then local fp32/stability fixes on that subgraph.

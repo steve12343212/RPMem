@@ -486,7 +486,14 @@ class HypernetModel(nn.Module):
             ctx_position_ids,
             ctx_features=ctx_features,
         )
+        hooks = getattr(self, "nan_probe_boundary_hooks", None)
+        if hooks is not None:
+            hooks.register("lora_emb", lora_emb)
         lora_dict = self.head(lora_emb)
+        if hooks is not None:
+            for module_name, matrices in lora_dict.items():
+                for key, tensor in matrices.items():
+                    hooks.register(f"lora.{module_name}.{key}", tensor)
         return lora_dict
 
     @torch.no_grad()
@@ -1390,6 +1397,10 @@ class HypernetModel(nn.Module):
         if label_pos[0].numel() == 0:
             raise ValueError("batch has no response labels after tokenization")
         student_logits = logits[label_pos[0], label_pos[1] - 1].float()
+        hooks = getattr(self, "nan_probe_boundary_hooks", None)
+        if hooks is not None:
+            # Hook the exact tensor consumed by FKL (not a later re-slice).
+            hooks.register("student_logits", student_logits)
 
         if logprobs_vals.dim() == 3:
             logprobs_vals = logprobs_vals.squeeze(0)

@@ -1,0 +1,99 @@
+{
+  "accum_window_samples": [
+    12027,
+    16890
+  ],
+  "boundary_grad_events": [
+    {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 0.011379018425941467,
+      "mean": 1.8905016441195244e-14,
+      "min": -0.02123842015862465,
+      "name": "student_logits",
+      "numel": 11091328,
+      "present": true,
+      "shape": [
+        73,
+        151936
+      ]
+    },
+    {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 3.934600830078125,
+      "mean": 0.0005974468076601624,
+      "min": -3.186279296875,
+      "name": "lora.down_proj.B",
+      "numel": 1179648,
+      "present": true,
+      "shape": [
+        1,
+        36,
+        8,
+        4096
+      ]
+    },
+    {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 0.04346156120300293,
+      "mean": -6.465010216061273e-08,
+      "min": -0.02686118893325329,
+      "name": "lora.down_proj.A",
+      "numel": 3538944,
+      "present": true,
+      "shape": [
+        1,
+        36,
+        8,
+        12288
+      ]
+    },
+    {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 1.1538224498508498e-05,
+      "mean": 2.0654544741205427e-10,
+      "min": -1.1795177670137491e-05,
+      "name": "lora_emb",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        1,
+        36,
+        1,
+        8,
+        512
+      ]
+    }
+  ],
+  "first_bad_boundary_grad": null,
+  "first_bad_param_grad": {
+    "dtype": "torch.float32",
+    "finite": false,
+    "inf_count": 0,
+    "max": NaN,
+    "mean": NaN,
+    "min": NaN,
+    "name": "perceiver.modality_projection.gate_proj.weight.grad",
+    "nan_count": 2359296,
+    "numel": 2359296,
+    "param_name": "perceiver.modality_projection.gate_proj.weight",
+    "present": true,
+    "shape": [
+      3072,
+      768
+    ]
+  },
+  "global_step": 53,
+  "logical_indices": [
+    16890
+  ],
+  "micro_step": 107,
+  "phase": "after_backward",
+  "sample_indices": [
+    16890
+  ],
+  "sync_gradients": true
+}
