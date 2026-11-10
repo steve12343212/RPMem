@@ -1,5 +1,6 @@
 log,logged_steps,last_finite_step,last_finite_loss,first_nan_step,lr_at_nan
 rpmem_kv_20k_1npu.1.log,109,455,0.6965,460,4.00e-05
+rpmem_kv_20k_1npu_nan_probe.1.log,53,53,1.7078,,
 rpmem_kv_20k_4npu_accum2.1.log,54,110,0.7008,115,3.99e-05
 rpmem_kv_20k_4npu_accum4.1.log,45,55,0.7606,60,3.99e-05
 rpmem_kv_20k_4npu_gbatch4.1.log,112,365,0.5964,370,3.97e-05

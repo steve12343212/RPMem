@@ -42,6 +42,17 @@ experiments/ascend_bf16_nan/
 
 Local archive also stored at `experiments/ascend_bf16_nan_bundle.tar.gz`.
 
+
+## NaN probe localization (1-NPU)
+
+Run `rpmem_kv_20k_1npu_nan_probe` with `--nan_probe` from step 0.
+
+- Forward on sample `16890` remained finite (`loss≈1.50`, head norms finite).
+- First non-finite tensor was `trainable[0].grad` (shape `[3072, 768]`, all NaNs) at `global_step=53`, phase `before_clip`.
+- Artifacts: `nan_probe/nan_probe.jsonl`, `nan_probe/first_bad_grad.json`, `logs/rpmem_kv_20k_1npu_nan_probe.1.log`.
+
+This supports backward-first NaN gradients rather than a fixed loss≈0.6 threshold or an immediately corrupt teacher forward.
+
 ## Current hypothesis
 
 Primary issue is numerical instability of **bf16 Fixed-FKL on Ascend** once the student approaches teacher (loss ~0.6), not multi-NPU communication alone. Next levers: fp32 critical path for FKL/logits, lower LR, stronger clipping, or NaN-skip/rollback.

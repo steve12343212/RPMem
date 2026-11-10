@@ -94,6 +94,13 @@ class HyperLoRAHead(nn.Module):
         ):
             h = self.layers(lora_emb)
             norm = torch.norm(h, dim=-1, keepdim=True)
+            # Optional NaN-probe counters (enabled by train_hypernet --nan_probe).
+            if getattr(self, "nan_probe_enabled", False):
+                norm_f = norm.detach().float()
+                self.last_head_min_norm = float(norm_f.min().item())
+                self.last_head_max_norm = float(norm_f.max().item())
+                self.last_head_norm_finite = bool(torch.isfinite(norm_f).all().item())
+                self.last_head_zero_norm = bool((norm_f == 0).any().item())
             h = h / norm
             flat_loras = self.head(h)
         return self._to_lora_dict(flat_loras)

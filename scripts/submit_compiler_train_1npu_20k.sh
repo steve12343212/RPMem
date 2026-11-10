@@ -23,6 +23,9 @@ LOG_DIR="${LOG_DIR:-$RPMEM_ROOT/logs/vc}"
 mkdir -p "$LOG_DIR"
 LOG_FILE="${LOG_DIR}/${JOB_NAME}.JOB.log"
 
+NAN_PROBE="${NAN_PROBE:-0}"
+NAN_PROBE_START_STEP="${NAN_PROBE_START_STEP:-430}"
+
 RUN_CMD=$(cat <<EOF
 set -euo pipefail
 cd '${RPMEM_ROOT}'
@@ -31,6 +34,8 @@ export TRAIN_DATA='${TRAIN_DATA}'
 export TEACHER_ROOT='${TEACHER_ROOT}'
 export OUTPUT_DIR='${OUTPUT_DIR}'
 export LOG_NAME='${LOG_NAME}'
+export NAN_PROBE='${NAN_PROBE}'
+export NAN_PROBE_START_STEP='${NAN_PROBE_START_STEP}'
 unset ASCEND_RT_VISIBLE_DEVICES
 unset PYTHON
 bash scripts/run_compiler_train_1npu_nan_repro.sh

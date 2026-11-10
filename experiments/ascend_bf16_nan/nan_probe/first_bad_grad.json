@@ -1,0 +1,26 @@
+{
+  "first_bad": {
+    "dtype": "torch.float32",
+    "finite": false,
+    "inf_count": 0,
+    "max": NaN,
+    "mean": NaN,
+    "min": NaN,
+    "name": "trainable[0].grad",
+    "nan_count": 2359296,
+    "numel": 2359296,
+    "present": true,
+    "shape": [
+      3072,
+      768
+    ]
+  },
+  "global_step": 53,
+  "logical_indices": [
+    16890
+  ],
+  "micro_step": 107,
+  "sample_indices": [
+    16890
+  ]
+}

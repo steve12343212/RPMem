@@ -34,6 +34,15 @@ echo "NAN_REPRO 1NPU CONFIG=$CONFIG DATA=$TRAIN_DATA TEACHER=$TEACHER_DIR OUT=$O
 echo "visible ASCEND_VISIBLE_DEVICES=${ASCEND_VISIBLE_DEVICES:-<unset>} ASCEND_RT_VISIBLE_DEVICES=${ASCEND_RT_VISIBLE_DEVICES:-<unset>}"
 export DEVICE_KIND=npu
 
+EXTRA_ARGS=()
+if [[ "${NAN_PROBE:-0}" == "1" ]]; then
+  EXTRA_ARGS+=(--nan_probe)
+  EXTRA_ARGS+=(--nan_probe_start_step "${NAN_PROBE_START_STEP:-430}")
+  if [[ -n "${NAN_PROBE_JSONL:-}" ]]; then
+    EXTRA_ARGS+=(--nan_probe_jsonl "$NAN_PROBE_JSONL")
+  fi
+fi
+
 "$PYTHON" -m accelerate.commands.launch \
   --config_file "$ACCEL_CFG" \
   --num_processes 1 \
@@ -45,6 +54,7 @@ export DEVICE_KIND=npu
   --ctx_encoder_path "$RPMEM_CTX_ENCODER" \
   --teacher_logprobs_dir "$TEACHER_DIR" \
   --no-use_flash_attn \
+  "${EXTRA_ARGS[@]}" \
   2>&1 | tee "$RPMEM_ROOT/logs/$LOG_NAME"
 
 echo "NAN_REPRO DONE -> $OUTPUT_DIR"

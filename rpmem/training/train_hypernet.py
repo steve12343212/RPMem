@@ -296,6 +296,27 @@ def parse_args(argv=None):
             "retaining the full optimization schedule."
         ),
     )
+    parser.add_argument(
+        "--nan_probe",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help=(
+            "Record sample indices and finite-ness probes around the known "
+            "collapse window; stop on first non-finite value when enabled."
+        ),
+    )
+    parser.add_argument(
+        "--nan_probe_start_step",
+        type=int,
+        default=0,
+        help="Optimizer step at which detailed NaN probes begin (inclusive).",
+    )
+    parser.add_argument(
+        "--nan_probe_jsonl",
+        type=str,
+        default=None,
+        help="JSONL path for NaN probe events; defaults to <output_dir>/nan_probe.jsonl.",
+    )
 
     args = parser.parse_args(argv)
 
@@ -1172,6 +1193,28 @@ def main(argv=None, *, opcd_backend_factory=None):
     log_metric_counts = {key: 0 for key in log_metric_sums}
     last_grad_norm = None
     t0 = time.time()
+    nan_probe_logger = None
+    if args.nan_probe:
+        unwrapped_for_probe = (
+            accelerator.unwrap_model(model) if use_accelerate else model
+        )
+        head = getattr(unwrapped_for_probe, "head", None)
+        if head is not None:
+            head.nan_probe_enabled = True
+        probe_path = (
+            Path(args.nan_probe_jsonl)
+            if args.nan_probe_jsonl
+            else Path(args.output_dir) / "nan_probe.jsonl"
+        )
+        if is_main:
+            from rpmem.training.nan_probe import NanProbeLogger
+
+            nan_probe_logger = NanProbeLogger(probe_path)
+            logger.info(
+                "NaN probe enabled: start_step=%s jsonl=%s",
+                args.nan_probe_start_step,
+                probe_path,
+            )
 
     logger.info(
         f"Starting training: {total_steps} optimizer steps, "
@@ -1602,9 +1645,128 @@ def main(argv=None, *, opcd_backend_factory=None):
             )
 
             did_optimizer_step = False
+            probe_active = bool(
+                args.nan_probe and global_step >= int(args.nan_probe_start_step)
+            )
+            sample_indices = None
+            logical_indices = None
+            if "sample_indices" in batch:
+                sample_indices = [
+                    int(x) for x in batch["sample_indices"].detach().cpu().tolist()
+                ]
+            if "logical_indices" in batch:
+                logical_indices = [
+                    int(x) for x in batch["logical_indices"].detach().cpu().tolist()
+                ]
+
+            generated_loras = None
             if use_accelerate:
                 with accelerator.accumulate(model):
-                    loss, logits, _ = model(**ctx_kwargs)
+                    loss, logits, generated_loras = model(**ctx_kwargs)
+                    if probe_active:
+                        probe_event = {
+                            "phase": "after_forward",
+                            "global_step": global_step,
+                            "micro_step": micro_step,
+                            "data_epoch": data_epoch,
+                            "batches_consumed_in_epoch": batches_consumed_in_epoch,
+                            "sample_indices": sample_indices,
+                            "logical_indices": logical_indices,
+                            "loss": float(loss.detach().float().item())
+                            if torch.isfinite(loss).all()
+                            else None,
+                            "loss_finite": bool(torch.isfinite(loss).all().item()),
+                        }
+                        unwrapped = (
+                            accelerator.unwrap_model(model)
+                            if use_accelerate
+                            else model
+                        )
+                        head = getattr(unwrapped, "head", None)
+                        if head is not None:
+                            probe_event["head_min_norm"] = getattr(
+                                head, "last_head_min_norm", None
+                            )
+                            probe_event["head_max_norm"] = getattr(
+                                head, "last_head_max_norm", None
+                            )
+                            probe_event["head_norm_finite"] = getattr(
+                                head, "last_head_norm_finite", None
+                            )
+                            probe_event["head_zero_norm"] = getattr(
+                                head, "last_head_zero_norm", None
+                            )
+                        metrics_model = unwrapped
+                        step_metrics = getattr(metrics_model, "last_loss_metrics", {})
+                        metric_snapshot = {}
+                        for key, value in step_metrics.items():
+                            if torch.is_tensor(value):
+                                metric_snapshot[key] = (
+                                    float(value.detach().float().item())
+                                    if torch.isfinite(value).all()
+                                    else None
+                                )
+                        probe_event["metrics"] = metric_snapshot
+                        from rpmem.training.nan_probe import (
+                            first_nonfinite,
+                            generated_lora_reports,
+                            tensor_finite_report,
+                        )
+
+                        reports = [
+                            tensor_finite_report("loss", loss),
+                            tensor_finite_report("logits", logits),
+                        ]
+                        if generated_loras is not None:
+                            reports.extend(generated_lora_reports(generated_loras))
+                        bad = first_nonfinite(reports)
+                        if bad is None and probe_event.get("head_zero_norm"):
+                            bad = {
+                                "name": "head.norm",
+                                "finite": False,
+                                "reason": "zero_norm_before_divide",
+                                "min": probe_event.get("head_min_norm"),
+                            }
+                        if bad is None and probe_event.get("head_norm_finite") is False:
+                            bad = {
+                                "name": "head.norm",
+                                "finite": False,
+                                "reason": "nonfinite_norm_before_divide",
+                                "min": probe_event.get("head_min_norm"),
+                            }
+                        probe_event["first_bad"] = bad
+                        if nan_probe_logger is not None and is_main:
+                            nan_probe_logger.write(probe_event)
+                        if bad is not None:
+                            if is_main:
+                                logger.error(
+                                    "NaN probe STOP after forward: bad=%s sample_indices=%s "
+                                    "logical_indices=%s step=%s micro=%s",
+                                    bad,
+                                    sample_indices,
+                                    logical_indices,
+                                    global_step,
+                                    micro_step,
+                                )
+                                stop_dir = Path(args.output_dir) / "nan_probe_stop"
+                                stop_dir.mkdir(parents=True, exist_ok=True)
+                                (stop_dir / "first_bad.json").write_text(
+                                    json.dumps(
+                                        {
+                                            "event": probe_event,
+                                            "reports": reports,
+                                        },
+                                        indent=2,
+                                        sort_keys=True,
+                                    )
+                                    + "\n"
+                                )
+                            if use_accelerate:
+                                accelerator.wait_for_everyone()
+                            raise RuntimeError(
+                                "NaN probe detected non-finite value after forward: "
+                                f"{bad}"
+                            )
                     accelerator.backward(loss)
                     if accelerator.sync_gradients:
                         if args.model_parallel_data_parallel:
@@ -1618,18 +1780,118 @@ def main(argv=None, *, opcd_backend_factory=None):
                                     "Synchronized trainable gradients: %s",
                                     sync_stats,
                                 )
+                        if probe_active:
+                            from rpmem.training.nan_probe import (
+                                first_nonfinite,
+                                param_grad_reports,
+                            )
+
+                            grad_reports = param_grad_reports(list(trainable_params))
+                            bad_grad = first_nonfinite(grad_reports)
+                            if nan_probe_logger is not None and is_main:
+                                nan_probe_logger.write(
+                                    {
+                                        "phase": "before_clip",
+                                        "global_step": global_step,
+                                        "micro_step": micro_step,
+                                        "sample_indices": sample_indices,
+                                        "logical_indices": logical_indices,
+                                        "first_bad": bad_grad,
+                                    }
+                                )
+                            if bad_grad is not None:
+                                if is_main:
+                                    logger.error(
+                                        "NaN probe STOP before clip/step: bad=%s "
+                                        "sample_indices=%s step=%s",
+                                        bad_grad,
+                                        sample_indices,
+                                        global_step,
+                                    )
+                                    stop_dir = Path(args.output_dir) / "nan_probe_stop"
+                                    stop_dir.mkdir(parents=True, exist_ok=True)
+                                    (stop_dir / "first_bad_grad.json").write_text(
+                                        json.dumps(
+                                            {
+                                                "sample_indices": sample_indices,
+                                                "logical_indices": logical_indices,
+                                                "global_step": global_step,
+                                                "micro_step": micro_step,
+                                                "first_bad": bad_grad,
+                                            },
+                                            indent=2,
+                                            sort_keys=True,
+                                        )
+                                        + "\n"
+                                    )
+                                accelerator.wait_for_everyone()
+                                raise RuntimeError(
+                                    "NaN probe detected non-finite gradient: "
+                                    f"{bad_grad}"
+                                )
                         grad_norm = accelerator.clip_grad_norm_(
                             trainable_params, args.max_grad_norm
                         )
                         if grad_norm is not None:
                             last_grad_norm = float(grad_norm.detach().float().item())
+                            if probe_active and not math.isfinite(last_grad_norm):
+                                if is_main:
+                                    logger.error(
+                                        "NaN probe STOP: non-finite grad_norm=%s "
+                                        "sample_indices=%s step=%s",
+                                        last_grad_norm,
+                                        sample_indices,
+                                        global_step,
+                                    )
+                                accelerator.wait_for_everyone()
+                                raise RuntimeError(
+                                    f"NaN probe: non-finite grad_norm={last_grad_norm}"
+                                )
                         did_optimizer_step = True
                     optimizer.step()
+                    if probe_active and did_optimizer_step:
+                        from rpmem.training.nan_probe import (
+                            first_nonfinite,
+                            param_grad_reports,
+                        )
+
+                        param_reports = [
+                            r
+                            for r in param_grad_reports(list(trainable_params))
+                            if r["name"].endswith(".param")
+                        ]
+                        bad_param = first_nonfinite(param_reports)
+                        if nan_probe_logger is not None and is_main:
+                            nan_probe_logger.write(
+                                {
+                                    "phase": "after_optimizer_step",
+                                    "global_step": global_step + 1,
+                                    "micro_step": micro_step,
+                                    "sample_indices": sample_indices,
+                                    "logical_indices": logical_indices,
+                                    "grad_norm": last_grad_norm,
+                                    "first_bad": bad_param,
+                                }
+                            )
+                        if bad_param is not None:
+                            if is_main:
+                                logger.error(
+                                    "NaN probe STOP after optimizer.step: bad=%s "
+                                    "sample_indices=%s step=%s",
+                                    bad_param,
+                                    sample_indices,
+                                    global_step,
+                                )
+                            accelerator.wait_for_everyone()
+                            raise RuntimeError(
+                                "NaN probe detected non-finite parameter after step: "
+                                f"{bad_param}"
+                            )
                     scheduler.step()
                     optimizer.zero_grad()
                 micro_step += 1
             else:
-                loss, logits, _ = model(**ctx_kwargs)
+                loss, logits, generated_loras = model(**ctx_kwargs)
                 loss = loss / args.gradient_accumulation_steps
                 loss.backward()
                 micro_step += 1
@@ -1646,9 +1908,53 @@ def main(argv=None, *, opcd_backend_factory=None):
 
             batches_consumed_in_epoch += 1
 
-            running_loss += loss.item()
+            # loss.item() itself raises if non-finite on some backends; guard for probe.
+            loss_value = float(loss.detach().float().item())
+            if not math.isfinite(loss_value):
+                if is_main:
+                    logger.error(
+                        "Non-finite loss.item() at step=%s micro=%s sample_indices=%s "
+                        "logical_indices=%s",
+                        global_step,
+                        micro_step,
+                        sample_indices,
+                        logical_indices,
+                    )
+                    stop_dir = Path(args.output_dir) / "nan_probe_stop"
+                    stop_dir.mkdir(parents=True, exist_ok=True)
+                    unwrapped = (
+                        accelerator.unwrap_model(model) if use_accelerate else model
+                    )
+                    head = getattr(unwrapped, "head", None)
+                    payload = {
+                        "phase": "loss_item_guard",
+                        "global_step": global_step,
+                        "micro_step": micro_step,
+                        "sample_indices": sample_indices,
+                        "logical_indices": logical_indices,
+                        "head_min_norm": getattr(head, "last_head_min_norm", None)
+                        if head is not None
+                        else None,
+                        "head_zero_norm": getattr(head, "last_head_zero_norm", None)
+                        if head is not None
+                        else None,
+                        "head_norm_finite": getattr(head, "last_head_norm_finite", None)
+                        if head is not None
+                        else None,
+                    }
+                    (stop_dir / "first_bad.json").write_text(
+                        json.dumps(payload, indent=2, sort_keys=True) + "\n"
+                    )
+                    if nan_probe_logger is not None:
+                        nan_probe_logger.write(payload)
+                if use_accelerate:
+                    accelerator.wait_for_everyone()
+                raise RuntimeError(
+                    f"Non-finite loss at step={global_step} samples={sample_indices}"
+                )
+            running_loss += loss_value
             running_loss_count += 1
-            log_loss += loss.item()
+            log_loss += loss_value
             log_loss_count += 1
             metrics_model = model.module if hasattr(model, "module") else model
             step_metrics = getattr(metrics_model, "last_loss_metrics", {})
@@ -1659,6 +1965,28 @@ def main(argv=None, *, opcd_backend_factory=None):
                         log_metric_sums[key] += float(value.detach().float().item())
                         log_metric_counts[key] += 1
             if did_optimizer_step:
+                # Save a clean checkpoint immediately before entering the known window.
+                if (
+                    args.nan_probe
+                    and global_step + 1 == int(args.nan_probe_start_step)
+                    and is_main
+                ):
+                    logger.info(
+                        "NaN probe: saving pre-window checkpoint at step %s",
+                        global_step + 1,
+                    )
+                if (
+                    args.nan_probe
+                    and (global_step + 1) == int(args.nan_probe_start_step)
+                ):
+                    save_training_checkpoint(
+                        global_step + 1,
+                        completed_micro_batches=(
+                            data_epoch * batches_per_epoch + batches_consumed_in_epoch
+                        ),
+                        epoch_boundary=False,
+                        completed_epochs=data_epoch,
+                    )
                 global_step += 1
 
             # Reset LoRA bindings after each step

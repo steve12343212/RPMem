@@ -1,0 +1,127 @@
+2026-11-10 23:32:55,614 [INFO] Training hypernetwork, output: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe
+2026-11-10 23:32:55,615 [INFO] Args: {'config': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_20k_1npu_nan_probe.yaml', 'base_model_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B', 'ctx_encoder_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base', 'base_model_device_map': None, 'model_parallel_data_parallel': False, 'from_checkpoint': None, 'resume_from_checkpoint': None, 'perceiver_init_checkpoint': None, 'trainable_scope': 'perceiver_and_head', 'use_flash_attn': False, 'base_model_gradient_checkpointing': False, 'n_layers': 36, 'd_latent': 512, 'lora_r': 8, 'target_modules': ['down_proj'], 'per_layer_processing': True, 'per_rank_gen': True, 'num_pre_head_layers': 4, 'n_latent_queries': 8, 'num_blocks': 9, 'train_data': ['/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_20k/train.jsonl'], 'val_data': None, 'max_ctx_len': 4096, 'max_seq_len': 640, 'per_device_train_batch_size': 1, 'per_device_eval_batch_size': 1, 'use_packing': False, 'teacher_logprobs_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k', 'val_teacher_logprobs_dir': None, 'objective': 'offline_fkl', 'opcd_loss_mode': 'student_topk_reverse_kl', 'opcd_top_k': 32, 'opcd_kl_chunk_size': 16, 'opcd_rollout_max_new_tokens': 128, 'opcd_max_teacher_seq_len': 4864, 'opcd_queries_per_session': 8, 'opcd_context_lift_every': 50, 'opcd_context_lift_eval_batches': 32, 'quality_eval_sessions': 0, 'quality_eval_queries_per_session': 8, 'quality_eval_max_new_tokens': 128, 'lr': 4e-05, 'weight_decay': 0.01, 'warmup_steps': 100, 'max_steps': 500, 'max_epochs': None, 'gradient_accumulation_steps': 2, 'max_grad_norm': 1.0, 'l1_reg_coef': 0.01, 'use_per_ctx_average_loss': True, 'lora_alpha': 32.0, 'lora_dropout': 0.0, 'output_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe', 'tensorboard_dir': None, 'save_steps': 500, 'eval_steps': 500, 'save_training_state': True, 'save_epoch_boundaries': True, 'save_total_limit': 2, 'logging_steps': 1, 'dataloader_num_workers': 0, 'seed': 42, 'preflight_stop_after_step': None, 'selected_endpoint_step': None, 'nan_probe': True, 'nan_probe_start_step': 430, 'nan_probe_jsonl': None}
+2026-11-10 23:33:12,876 [INFO] Trainable scope: perceiver_and_head; params: 657,345,088
+2026-11-10 23:33:13,809 [INFO] Indexed 20000 training samples without materializing the rows
+2026-11-10 23:33:14,086 [INFO] Distillation mode: teacher logprobs from /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k
+2026-11-10 23:33:14,087 [INFO] Phase 1 objective: offline_fkl
+2026-11-10 23:33:15,005 [INFO] TensorBoard logging to: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe/tb_logs
+2026-11-10 23:33:15,028 [INFO] NaN probe enabled: start_step=430 jsonl=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe/nan_probe.jsonl
+2026-11-10 23:33:15,028 [INFO] Starting training: 500 optimizer steps, grad_accum=2
+2026-11-10 23:33:18,595 [INFO] Step 1/500 | loss=2.5005 | lr=4.00e-07 | speed=0.3 steps/s
+2026-11-10 23:33:20,036 [INFO] Step 2/500 | loss=2.2618 | lr=8.00e-07 | speed=0.4 steps/s
+2026-11-10 23:33:21,183 [INFO] Step 3/500 | loss=2.4311 | lr=1.20e-06 | speed=0.5 steps/s
+2026-11-10 23:33:22,294 [INFO] Step 4/500 | loss=3.1137 | lr=1.60e-06 | speed=0.5 steps/s
+2026-11-10 23:33:23,425 [INFO] Step 5/500 | loss=3.5645 | lr=2.00e-06 | speed=0.6 steps/s
+2026-11-10 23:33:24,523 [INFO] Step 6/500 | loss=4.2166 | lr=2.40e-06 | speed=0.6 steps/s
+2026-11-10 23:33:25,662 [INFO] Step 7/500 | loss=3.0840 | lr=2.80e-06 | speed=0.7 steps/s
+2026-11-10 23:33:26,789 [INFO] Step 8/500 | loss=2.7590 | lr=3.20e-06 | speed=0.7 steps/s
+2026-11-10 23:33:27,942 [INFO] Step 9/500 | loss=3.6870 | lr=3.60e-06 | speed=0.7 steps/s
+2026-11-10 23:33:29,120 [INFO] Step 10/500 | loss=2.6988 | lr=4.00e-06 | speed=0.7 steps/s
+2026-11-10 23:33:30,234 [INFO] Step 11/500 | loss=2.9574 | lr=4.40e-06 | speed=0.7 steps/s
+2026-11-10 23:33:31,407 [INFO] Step 12/500 | loss=2.5765 | lr=4.80e-06 | speed=0.7 steps/s
+2026-11-10 23:33:32,588 [INFO] Step 13/500 | loss=2.0703 | lr=5.20e-06 | speed=0.7 steps/s
+2026-11-10 23:33:33,723 [INFO] Step 14/500 | loss=2.1848 | lr=5.60e-06 | speed=0.7 steps/s
+2026-11-10 23:33:35,025 [INFO] Step 15/500 | loss=2.8254 | lr=6.00e-06 | speed=0.7 steps/s
+2026-11-10 23:33:36,155 [INFO] Step 16/500 | loss=2.1497 | lr=6.40e-06 | speed=0.8 steps/s
+2026-11-10 23:33:37,268 [INFO] Step 17/500 | loss=2.8480 | lr=6.80e-06 | speed=0.8 steps/s
+2026-11-10 23:33:38,392 [INFO] Step 18/500 | loss=2.0647 | lr=7.20e-06 | speed=0.8 steps/s
+2026-11-10 23:33:39,526 [INFO] Step 19/500 | loss=2.7096 | lr=7.60e-06 | speed=0.8 steps/s
+2026-11-10 23:33:40,619 [INFO] Step 20/500 | loss=3.2010 | lr=8.00e-06 | speed=0.8 steps/s
+2026-11-10 23:33:41,755 [INFO] Step 21/500 | loss=2.5014 | lr=8.40e-06 | speed=0.8 steps/s
+2026-11-10 23:33:42,967 [INFO] Step 22/500 | loss=2.6736 | lr=8.80e-06 | speed=0.8 steps/s
+2026-11-10 23:33:44,067 [INFO] Step 23/500 | loss=2.3363 | lr=9.20e-06 | speed=0.8 steps/s
+2026-11-10 23:33:45,175 [INFO] Step 24/500 | loss=2.2979 | lr=9.60e-06 | speed=0.8 steps/s
+2026-11-10 23:33:46,562 [INFO] Step 25/500 | loss=2.5168 | lr=1.00e-05 | speed=0.8 steps/s
+2026-11-10 23:33:47,676 [INFO] Step 26/500 | loss=1.8613 | lr=1.04e-05 | speed=0.8 steps/s
+2026-11-10 23:33:48,794 [INFO] Step 27/500 | loss=4.6142 | lr=1.08e-05 | speed=0.8 steps/s
+2026-11-10 23:33:49,965 [INFO] Step 28/500 | loss=2.2605 | lr=1.12e-05 | speed=0.8 steps/s
+2026-11-10 23:33:51,104 [INFO] Step 29/500 | loss=2.2562 | lr=1.16e-05 | speed=0.8 steps/s
+2026-11-10 23:33:52,249 [INFO] Step 30/500 | loss=1.8194 | lr=1.20e-05 | speed=0.8 steps/s
+2026-11-10 23:33:53,440 [INFO] Step 31/500 | loss=2.6637 | lr=1.24e-05 | speed=0.8 steps/s
+2026-11-10 23:33:54,699 [INFO] Step 32/500 | loss=1.5508 | lr=1.28e-05 | speed=0.8 steps/s
+2026-11-10 23:33:55,836 [INFO] Step 33/500 | loss=3.0084 | lr=1.32e-05 | speed=0.8 steps/s
+2026-11-10 23:33:56,961 [INFO] Step 34/500 | loss=2.6275 | lr=1.36e-05 | speed=0.8 steps/s
+2026-11-10 23:33:58,124 [INFO] Step 35/500 | loss=1.8958 | lr=1.40e-05 | speed=0.8 steps/s
+2026-11-10 23:33:59,279 [INFO] Step 36/500 | loss=2.3787 | lr=1.44e-05 | speed=0.8 steps/s
+2026-11-10 23:34:00,468 [INFO] Step 37/500 | loss=1.2580 | lr=1.48e-05 | speed=0.8 steps/s
+2026-11-10 23:34:01,630 [INFO] Step 38/500 | loss=2.1499 | lr=1.52e-05 | speed=0.8 steps/s
+2026-11-10 23:34:02,877 [INFO] Step 39/500 | loss=1.9470 | lr=1.56e-05 | speed=0.8 steps/s
+2026-11-10 23:34:04,263 [INFO] Step 40/500 | loss=2.4704 | lr=1.60e-05 | speed=0.8 steps/s
+2026-11-10 23:34:05,378 [INFO] Step 41/500 | loss=2.8236 | lr=1.64e-05 | speed=0.8 steps/s
+2026-11-10 23:34:06,584 [INFO] Step 42/500 | loss=1.7038 | lr=1.68e-05 | speed=0.8 steps/s
+2026-11-10 23:34:07,700 [INFO] Step 43/500 | loss=1.9504 | lr=1.72e-05 | speed=0.8 steps/s
+2026-11-10 23:34:08,950 [INFO] Step 44/500 | loss=1.7489 | lr=1.76e-05 | speed=0.8 steps/s
+2026-11-10 23:34:10,083 [INFO] Step 45/500 | loss=1.7646 | lr=1.80e-05 | speed=0.8 steps/s
+2026-11-10 23:34:11,219 [INFO] Step 46/500 | loss=1.4184 | lr=1.84e-05 | speed=0.8 steps/s
+2026-11-10 23:34:12,751 [INFO] Step 47/500 | loss=1.4568 | lr=1.88e-05 | speed=0.8 steps/s
+2026-11-10 23:34:13,902 [INFO] Step 48/500 | loss=2.0766 | lr=1.92e-05 | speed=0.8 steps/s
+2026-11-10 23:34:15,003 [INFO] Step 49/500 | loss=1.4276 | lr=1.96e-05 | speed=0.8 steps/s
+2026-11-10 23:34:16,282 [INFO] Step 50/500 | loss=1.2358 | lr=2.00e-05 | speed=0.8 steps/s
+2026-11-10 23:34:17,439 [INFO] Step 51/500 | loss=1.8073 | lr=2.04e-05 | speed=0.8 steps/s
+2026-11-10 23:34:18,678 [INFO] Step 52/500 | loss=1.6152 | lr=2.08e-05 | speed=0.8 steps/s
+2026-11-10 23:34:19,786 [INFO] Step 53/500 | loss=1.7081 | lr=2.12e-05 | speed=0.8 steps/s
+2026-11-10 23:34:20,926 [INFO] Step 54/500 | loss=1.3135 | lr=2.16e-05 | speed=0.8 steps/s
+2026-11-10 23:34:21,482 [ERROR] Non-finite loss.item() at step=54 micro=109 sample_indices=[3213]
+2026-11-10 23:38:36,450 [INFO] Training hypernetwork, output: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe
+2026-11-10 23:38:36,453 [INFO] Args: {'config': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_20k_1npu_nan_probe.yaml', 'base_model_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B', 'ctx_encoder_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base', 'base_model_device_map': None, 'model_parallel_data_parallel': False, 'from_checkpoint': None, 'resume_from_checkpoint': None, 'perceiver_init_checkpoint': None, 'trainable_scope': 'perceiver_and_head', 'use_flash_attn': False, 'base_model_gradient_checkpointing': False, 'n_layers': 36, 'd_latent': 512, 'lora_r': 8, 'target_modules': ['down_proj'], 'per_layer_processing': True, 'per_rank_gen': True, 'num_pre_head_layers': 4, 'n_latent_queries': 8, 'num_blocks': 9, 'train_data': ['/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_20k/train.jsonl'], 'val_data': None, 'max_ctx_len': 4096, 'max_seq_len': 640, 'per_device_train_batch_size': 1, 'per_device_eval_batch_size': 1, 'use_packing': False, 'teacher_logprobs_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k', 'val_teacher_logprobs_dir': None, 'objective': 'offline_fkl', 'opcd_loss_mode': 'student_topk_reverse_kl', 'opcd_top_k': 32, 'opcd_kl_chunk_size': 16, 'opcd_rollout_max_new_tokens': 128, 'opcd_max_teacher_seq_len': 4864, 'opcd_queries_per_session': 8, 'opcd_context_lift_every': 50, 'opcd_context_lift_eval_batches': 32, 'quality_eval_sessions': 0, 'quality_eval_queries_per_session': 8, 'quality_eval_max_new_tokens': 128, 'lr': 4e-05, 'weight_decay': 0.01, 'warmup_steps': 100, 'max_steps': 500, 'max_epochs': None, 'gradient_accumulation_steps': 2, 'max_grad_norm': 1.0, 'l1_reg_coef': 0.01, 'use_per_ctx_average_loss': True, 'lora_alpha': 32.0, 'lora_dropout': 0.0, 'output_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe', 'tensorboard_dir': None, 'save_steps': 500, 'eval_steps': 500, 'save_training_state': True, 'save_epoch_boundaries': True, 'save_total_limit': 2, 'logging_steps': 1, 'dataloader_num_workers': 0, 'seed': 42, 'preflight_stop_after_step': None, 'selected_endpoint_step': None, 'nan_probe': True, 'nan_probe_start_step': 0, 'nan_probe_jsonl': None}
+2026-11-10 23:38:57,513 [INFO] Trainable scope: perceiver_and_head; params: 657,345,088
+2026-11-10 23:38:58,418 [INFO] Indexed 20000 training samples without materializing the rows
+2026-11-10 23:38:58,698 [INFO] Distillation mode: teacher logprobs from /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k
+2026-11-10 23:38:58,698 [INFO] Phase 1 objective: offline_fkl
+2026-11-10 23:38:59,631 [INFO] TensorBoard logging to: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe/tb_logs
+2026-11-10 23:38:59,643 [INFO] NaN probe enabled: start_step=0 jsonl=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe/nan_probe.jsonl
+2026-11-10 23:38:59,643 [INFO] Starting training: 500 optimizer steps, grad_accum=2
+2026-11-10 23:39:03,713 [INFO] Step 1/500 | loss=2.5005 | lr=4.00e-07 | speed=0.2 steps/s
+2026-11-10 23:39:05,557 [INFO] Step 2/500 | loss=2.2618 | lr=8.00e-07 | speed=0.3 steps/s
+2026-11-10 23:39:07,129 [INFO] Step 3/500 | loss=2.4311 | lr=1.20e-06 | speed=0.4 steps/s
+2026-11-10 23:39:08,674 [INFO] Step 4/500 | loss=3.1137 | lr=1.60e-06 | speed=0.4 steps/s
+2026-11-10 23:39:10,227 [INFO] Step 5/500 | loss=3.5645 | lr=2.00e-06 | speed=0.5 steps/s
+2026-11-10 23:39:11,734 [INFO] Step 6/500 | loss=4.2166 | lr=2.40e-06 | speed=0.5 steps/s
+2026-11-10 23:39:13,320 [INFO] Step 7/500 | loss=3.0840 | lr=2.80e-06 | speed=0.5 steps/s
+2026-11-10 23:39:14,853 [INFO] Step 8/500 | loss=2.7590 | lr=3.20e-06 | speed=0.5 steps/s
+2026-11-10 23:39:16,419 [INFO] Step 9/500 | loss=3.6870 | lr=3.60e-06 | speed=0.5 steps/s
+2026-11-10 23:39:18,017 [INFO] Step 10/500 | loss=2.6988 | lr=4.00e-06 | speed=0.5 steps/s
+2026-11-10 23:39:19,543 [INFO] Step 11/500 | loss=2.9574 | lr=4.40e-06 | speed=0.6 steps/s
+2026-11-10 23:39:21,144 [INFO] Step 12/500 | loss=2.5765 | lr=4.80e-06 | speed=0.6 steps/s
+2026-11-10 23:39:22,751 [INFO] Step 13/500 | loss=2.0703 | lr=5.20e-06 | speed=0.6 steps/s
+2026-11-10 23:39:24,294 [INFO] Step 14/500 | loss=2.1848 | lr=5.60e-06 | speed=0.6 steps/s
+2026-11-10 23:39:25,983 [INFO] Step 15/500 | loss=2.8254 | lr=6.00e-06 | speed=0.6 steps/s
+2026-11-10 23:39:27,886 [INFO] Step 16/500 | loss=2.1497 | lr=6.40e-06 | speed=0.6 steps/s
+2026-11-10 23:39:29,408 [INFO] Step 17/500 | loss=2.8480 | lr=6.80e-06 | speed=0.6 steps/s
+2026-11-10 23:39:30,943 [INFO] Step 18/500 | loss=2.0647 | lr=7.20e-06 | speed=0.6 steps/s
+2026-11-10 23:39:32,497 [INFO] Step 19/500 | loss=2.7076 | lr=7.60e-06 | speed=0.6 steps/s
+2026-11-10 23:39:33,991 [INFO] Step 20/500 | loss=3.2016 | lr=8.00e-06 | speed=0.6 steps/s
+2026-11-10 23:39:35,508 [INFO] Step 21/500 | loss=2.5014 | lr=8.40e-06 | speed=0.6 steps/s
+2026-11-10 23:39:37,132 [INFO] Step 22/500 | loss=2.6703 | lr=8.80e-06 | speed=0.6 steps/s
+2026-11-10 23:39:38,635 [INFO] Step 23/500 | loss=2.3355 | lr=9.20e-06 | speed=0.6 steps/s
+2026-11-10 23:39:40,155 [INFO] Step 24/500 | loss=2.3005 | lr=9.60e-06 | speed=0.6 steps/s
+2026-11-10 23:39:41,958 [INFO] Step 25/500 | loss=2.5196 | lr=1.00e-05 | speed=0.6 steps/s
+2026-11-10 23:39:43,475 [INFO] Step 26/500 | loss=1.8612 | lr=1.04e-05 | speed=0.6 steps/s
+2026-11-10 23:39:45,018 [INFO] Step 27/500 | loss=4.6141 | lr=1.08e-05 | speed=0.6 steps/s
+2026-11-10 23:39:46,617 [INFO] Step 28/500 | loss=2.2596 | lr=1.12e-05 | speed=0.6 steps/s
+2026-11-10 23:39:48,196 [INFO] Step 29/500 | loss=2.2556 | lr=1.16e-05 | speed=0.6 steps/s
+2026-11-10 23:39:49,736 [INFO] Step 30/500 | loss=1.8315 | lr=1.20e-05 | speed=0.6 steps/s
+2026-11-10 23:39:51,369 [INFO] Step 31/500 | loss=2.6564 | lr=1.24e-05 | speed=0.6 steps/s
+2026-11-10 23:39:53,060 [INFO] Step 32/500 | loss=1.5463 | lr=1.28e-05 | speed=0.6 steps/s
+2026-11-10 23:39:54,630 [INFO] Step 33/500 | loss=3.0203 | lr=1.32e-05 | speed=0.6 steps/s
+2026-11-10 23:39:56,184 [INFO] Step 34/500 | loss=2.6263 | lr=1.36e-05 | speed=0.6 steps/s
+2026-11-10 23:39:57,759 [INFO] Step 35/500 | loss=1.8941 | lr=1.40e-05 | speed=0.6 steps/s
+2026-11-10 23:39:59,345 [INFO] Step 36/500 | loss=2.3795 | lr=1.44e-05 | speed=0.6 steps/s
+2026-11-10 23:40:00,957 [INFO] Step 37/500 | loss=1.2542 | lr=1.48e-05 | speed=0.6 steps/s
+2026-11-10 23:40:02,590 [INFO] Step 38/500 | loss=2.1579 | lr=1.52e-05 | speed=0.6 steps/s
+2026-11-10 23:40:04,331 [INFO] Step 39/500 | loss=1.9538 | lr=1.56e-05 | speed=0.6 steps/s
+2026-11-10 23:40:06,192 [INFO] Step 40/500 | loss=2.4733 | lr=1.60e-05 | speed=0.6 steps/s
+2026-11-10 23:40:07,795 [INFO] Step 41/500 | loss=2.8252 | lr=1.64e-05 | speed=0.6 steps/s
+2026-11-10 23:40:09,473 [INFO] Step 42/500 | loss=1.7068 | lr=1.68e-05 | speed=0.6 steps/s
+2026-11-10 23:40:10,989 [INFO] Step 43/500 | loss=1.9578 | lr=1.72e-05 | speed=0.6 steps/s
+2026-11-10 23:40:12,658 [INFO] Step 44/500 | loss=1.7494 | lr=1.76e-05 | speed=0.6 steps/s
+2026-11-10 23:40:14,233 [INFO] Step 45/500 | loss=1.7770 | lr=1.80e-05 | speed=0.6 steps/s
+2026-11-10 23:40:15,807 [INFO] Step 46/500 | loss=1.4195 | lr=1.84e-05 | speed=0.6 steps/s
+2026-11-10 23:40:17,364 [INFO] Step 47/500 | loss=1.4550 | lr=1.88e-05 | speed=0.6 steps/s
+2026-11-10 23:40:18,929 [INFO] Step 48/500 | loss=2.0782 | lr=1.92e-05 | speed=0.6 steps/s
+2026-11-10 23:40:20,447 [INFO] Step 49/500 | loss=1.4334 | lr=1.96e-05 | speed=0.6 steps/s
+2026-11-10 23:40:22,153 [INFO] Step 50/500 | loss=1.2373 | lr=2.00e-05 | speed=0.6 steps/s
+2026-11-10 23:40:23,739 [INFO] Step 51/500 | loss=1.8025 | lr=2.04e-05 | speed=0.6 steps/s
+2026-11-10 23:40:25,438 [INFO] Step 52/500 | loss=1.6207 | lr=2.08e-05 | speed=0.6 steps/s
+2026-11-10 23:40:26,946 [INFO] Step 53/500 | loss=1.7078 | lr=2.12e-05 | speed=0.6 steps/s
+2026-11-10 23:40:28,442 [ERROR] NaN probe STOP before clip/step: bad={'name': 'trainable[0].grad', 'present': True, 'finite': False, 'dtype': 'torch.float32', 'shape': [3072, 768], 'numel': 2359296, 'min': nan, 'max': nan, 'mean': nan, 'nan_count': 2359296, 'inf_count': 0} sample_indices=[16890] step=53
