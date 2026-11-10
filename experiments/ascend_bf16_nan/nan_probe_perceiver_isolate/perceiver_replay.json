@@ -1,0 +1,127 @@
+{
+  "boundary_grad_events": [
+    {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 1.1538224498508498e-05,
+      "mean": 2.0654544741205427e-10,
+      "min": -1.1795177670137491e-05,
+      "name": "lora_emb",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        1,
+        36,
+        1,
+        8,
+        512
+      ]
+    },
+    {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 4.662452283810126e-06,
+      "mean": -6.409680008978569e-10,
+      "min": -3.4024985779979033e-06,
+      "name": "perceiver.latents",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        512
+      ]
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 6.007030606269836e-08,
+      "mean": -3.9881875579794723e-11,
+      "min": -7.217749953269958e-08,
+      "name": "perceiver.projected",
+      "numel": 5603328,
+      "present": true,
+      "shape": [
+        36,
+        304,
+        512
+      ]
+    }
+  ],
+  "checkpoint": "/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k_1npu_nan_probe_s53/checkpoint-53/pytorch_model.bin",
+  "device": "npu",
+  "dump": "/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_perceiver_isolate/nan_probe_dump/sample_16890_perceiver.pt",
+  "first_bad_boundary_grad": null,
+  "first_bad_param_grad": null,
+  "input_reports": {
+    "ctx_attn_mask": {
+      "dtype": "torch.int64",
+      "finite": true,
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "name": "ctx_attn_mask",
+      "numel": 304,
+      "present": true,
+      "shape": [
+        1,
+        304
+      ]
+    },
+    "ctx_features": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 2270.955322265625,
+      "mean": -0.2612524628639221,
+      "min": -38674.14453125,
+      "name": "ctx_features",
+      "numel": 8404992,
+      "present": true,
+      "shape": [
+        1,
+        36,
+        304,
+        768
+      ]
+    },
+    "grad_lora_emb": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "max": 1.1538224498508498e-05,
+      "mean": 2.0654544741205427e-10,
+      "min": -1.1795177670137491e-05,
+      "name": "grad_lora_emb",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        1,
+        36,
+        1,
+        8,
+        512
+      ]
+    }
+  },
+  "lora_emb_forward": {
+    "dtype": "torch.float32",
+    "finite": true,
+    "max": 3.3479630947113037,
+    "mean": -0.06125304847955704,
+    "min": -3.9743640422821045,
+    "name": "lora_emb",
+    "numel": 147456,
+    "present": true,
+    "shape": [
+      1,
+      36,
+      1,
+      8,
+      512
+    ]
+  },
+  "perceiver_param_grads_nonfinite": {},
+  "reproduced_nan": false,
+  "sample_index": 16890,
+  "source_global_step": 53,
+  "source_micro_step": 107
+}

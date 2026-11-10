@@ -317,6 +317,24 @@ def parse_args(argv=None):
         default=None,
         help="JSONL path for NaN probe events; defaults to <output_dir>/nan_probe.jsonl.",
     )
+    parser.add_argument(
+        "--nan_probe_capture_sample",
+        type=int,
+        default=None,
+        help=(
+            "When nan_probe is active, dump Perceiver inputs and dL/dlora_emb for "
+            "this sample_index under <output_dir>/nan_probe_dump/."
+        ),
+    )
+    parser.add_argument(
+        "--nan_probe_zero_grad_before_capture",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help=(
+            "Before capturing/backward on nan_probe_capture_sample, clear all "
+            "trainable .grad buffers so this microbatch is not accumulated."
+        ),
+    )
 
     args = parser.parse_args(argv)
 
@@ -1206,8 +1224,25 @@ def main(argv=None, *, opcd_backend_factory=None):
         head = getattr(unwrapped_for_probe, "head", None)
         if head is not None:
             head.nan_probe_enabled = True
-        nan_probe_boundary_hooks = BoundaryGradRecorder()
+        capture_names = {
+            "lora_emb",
+            "perceiver.projected",
+            "perceiver.latents",
+        }
+        nan_probe_boundary_hooks = BoundaryGradRecorder(capture_names=capture_names)
         unwrapped_for_probe.nan_probe_boundary_hooks = nan_probe_boundary_hooks
+        perceiver = getattr(unwrapped_for_probe, "perceiver", None)
+        if perceiver is not None:
+            perceiver.nan_probe_boundary_hooks = nan_probe_boundary_hooks
+        unwrapped_for_probe.nan_probe_capture = {
+            "enabled": False,
+            "sample_index": (
+                int(args.nan_probe_capture_sample)
+                if args.nan_probe_capture_sample is not None
+                else None
+            ),
+            "inputs": None,
+        }
         named_trainable_params = [
             (name, param)
             for name, param in unwrapped_for_probe.named_parameters()
@@ -1221,10 +1256,12 @@ def main(argv=None, *, opcd_backend_factory=None):
         if is_main:
             nan_probe_logger = NanProbeLogger(probe_path)
             logger.info(
-                "NaN probe enabled: start_step=%s jsonl=%s named_trainable=%d",
+                "NaN probe enabled: start_step=%s jsonl=%s named_trainable=%d "
+                "capture_sample=%s",
                 args.nan_probe_start_step,
                 probe_path,
                 len(named_trainable_params),
+                args.nan_probe_capture_sample,
             )
 
     logger.info(
@@ -1687,6 +1724,45 @@ def main(argv=None, *, opcd_backend_factory=None):
                 with accelerator.accumulate(model):
                     if probe_active and nan_probe_boundary_hooks is not None:
                         nan_probe_boundary_hooks.clear()
+                    capture_this = bool(
+                        probe_active
+                        and args.nan_probe_capture_sample is not None
+                        and sample_indices is not None
+                        and int(args.nan_probe_capture_sample) in sample_indices
+                    )
+                    if probe_active:
+                        unwrapped_probe = accelerator.unwrap_model(model)
+                        capture_state = getattr(
+                            unwrapped_probe, "nan_probe_capture", None
+                        )
+                        if isinstance(capture_state, dict):
+                            capture_state["enabled"] = capture_this
+                            capture_state["inputs"] = None
+                    if (
+                        capture_this
+                        and args.nan_probe_zero_grad_before_capture
+                    ):
+                        for _, param in named_trainable_params:
+                            param.grad = None
+                        if is_main:
+                            logger.info(
+                                "NaN probe: zeroed trainable grads before capture "
+                                "sample %s (window=%s)",
+                                sample_indices,
+                                accum_window_samples,
+                            )
+                    # Snapshot pre-backward accum grads for the capture sample.
+                    pre_capture_gate_grad = None
+                    if capture_this and is_main:
+                        for name, param in named_trainable_params:
+                            if name.endswith(
+                                "modality_projection.gate_proj.weight"
+                            ):
+                                if param.grad is not None:
+                                    pre_capture_gate_grad = (
+                                        param.grad.detach().cpu().clone()
+                                    )
+                                break
                     loss, logits, generated_loras = model(**ctx_kwargs)
                     if probe_active:
                         probe_event = {
@@ -1784,12 +1860,29 @@ def main(argv=None, *, opcd_backend_factory=None):
 
                     # Check grads after EVERY microbatch backward, not only on sync.
                     if probe_active:
+                        from rpmem.training.nan_probe import named_param_grad_snapshot
+
                         bad_grad = first_nonfinite_named_grad(named_trainable_params)
                         boundary_bad = (
                             nan_probe_boundary_hooks.first_bad()
                             if nan_probe_boundary_hooks is not None
                             else None
                         )
+                        # Catch overflow-prone but still "finite" activation grads.
+                        if (
+                            boundary_bad is None
+                            and nan_probe_boundary_hooks is not None
+                        ):
+                            for event in nan_probe_boundary_hooks.events:
+                                absmax = event.get("absmax")
+                                if (
+                                    absmax is not None
+                                    and math.isfinite(float(absmax))
+                                    and float(absmax) >= 1.0e20
+                                ):
+                                    boundary_bad = dict(event)
+                                    boundary_bad["reason"] = "catastrophic_absmax"
+                                    break
                         after_bwd = {
                             "phase": "after_backward",
                             "global_step": global_step,
@@ -1806,6 +1899,81 @@ def main(argv=None, *, opcd_backend_factory=None):
                                 else []
                             ),
                         }
+                        if capture_this and is_main:
+                            unwrapped_probe = accelerator.unwrap_model(model)
+                            capture_state = getattr(
+                                unwrapped_probe, "nan_probe_capture", {}
+                            )
+                            dump_dir = Path(args.output_dir) / "nan_probe_dump"
+                            dump_dir.mkdir(parents=True, exist_ok=True)
+                            sample_id = int(args.nan_probe_capture_sample)
+                            dump_path = dump_dir / f"sample_{sample_id}_perceiver.pt"
+                            perceiver_params = [
+                                (name, param)
+                                for name, param in named_trainable_params
+                                if name.startswith("perceiver.")
+                            ]
+                            gate_grad_after = None
+                            gate_param_name = None
+                            for name, param in named_trainable_params:
+                                if name.endswith(
+                                    "modality_projection.gate_proj.weight"
+                                ):
+                                    gate_param_name = name
+                                    if param.grad is not None:
+                                        gate_grad_after = (
+                                            param.grad.detach().cpu().clone()
+                                        )
+                                    break
+                            payload = {
+                                "sample_index": sample_id,
+                                "global_step": global_step,
+                                "micro_step": micro_step,
+                                "accum_window_samples": list(accum_window_samples),
+                                "sync_gradients": bool(accelerator.sync_gradients),
+                                "zero_grad_before_capture": bool(
+                                    args.nan_probe_zero_grad_before_capture
+                                ),
+                                "inputs": capture_state.get("inputs"),
+                                "grad_lora_emb": (
+                                    nan_probe_boundary_hooks.captured.get("lora_emb")
+                                    if nan_probe_boundary_hooks is not None
+                                    else None
+                                ),
+                                "grad_perceiver_projected": (
+                                    nan_probe_boundary_hooks.captured.get(
+                                        "perceiver.projected"
+                                    )
+                                    if nan_probe_boundary_hooks is not None
+                                    else None
+                                ),
+                                "grad_perceiver_latents": (
+                                    nan_probe_boundary_hooks.captured.get(
+                                        "perceiver.latents"
+                                    )
+                                    if nan_probe_boundary_hooks is not None
+                                    else None
+                                ),
+                                "boundary_grad_events": list(
+                                    nan_probe_boundary_hooks.events
+                                )
+                                if nan_probe_boundary_hooks is not None
+                                else [],
+                                "perceiver_param_grads": named_param_grad_snapshot(
+                                    perceiver_params
+                                ),
+                                "first_bad_param_grad": bad_grad,
+                                "gate_proj_weight_name": gate_param_name,
+                                "gate_proj_weight_grad_before": pre_capture_gate_grad,
+                                "gate_proj_weight_grad_after": gate_grad_after,
+                            }
+                            torch.save(payload, dump_path)
+                            after_bwd["dump_path"] = str(dump_path)
+                            logger.info(
+                                "NaN probe dump written: %s (lora_emb_grad=%s)",
+                                dump_path,
+                                payload["grad_lora_emb"] is not None,
+                            )
                         if nan_probe_logger is not None and is_main:
                             nan_probe_logger.write(after_bwd)
                         first_bad = boundary_bad or bad_grad

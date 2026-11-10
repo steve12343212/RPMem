@@ -67,3 +67,17 @@ Implication: first bad sample in this window is `16890`; FKL and HyperLoRA head 
 ## Current hypothesis
 
 Primary issue is numerical instability on the **Perceiver backward** path under Ascend bf16 for sample `16890` at step-53 weights—not FKL loss or HyperLoRA head first. Next levers: single-sample replay from `checkpoint-53`, deeper Perceiver hooks, then local fp32/stability fixes on that subgraph.
+
+## Perceiver isolate from checkpoint-53 (`nan_probe_perceiver_isolate`)
+
+Resume `checkpoint-53`, replay `12027 → 16890`, dump `ctx_features` + `dL/dlora_emb`, then isolated Perceiver `autograd.backward`.
+
+| Setting | Training window result | Isolated Perceiver replay |
+|---|---|---|
+| Accumulated grads (default) | `lora_emb`/`latents` tiny & finite; `projected.grad` absmax `~2.5e31` (bf16) then `grad_norm=inf` | No NaN once (`projected` absmax `~6e-8`) |
+| Zero-grad before `16890` | `projected.grad` has NaNs (`nan_count` 1024); `gate_proj.weight.grad` all NaN | No NaN flag, but `projected.grad` absmax `~2.8e29` |
+
+Artifacts: `nan_probe_perceiver_isolate/`, `nan_probe_perceiver_isolate_zgrad/`.
+
+Implication: fault is **inside encoder backward** (`latents → projected`), not FKL/head, and **not** from accumulating `12027`. `ctx_features` for `16890` already has absmax `~3.9e4`. Isolated replay is **nondeterministic** at this scale (1e-8 vs 1e29); next step is capture forward `projected`/`latents`, force deterministic SDPA, and/or FP32 encoder backward on the saved activations.
+

@@ -373,6 +373,11 @@ class Perceiver(nn.Module):
         projected = self.modality_projection(ctx_features)
         latents = self.encoder(projected, ctx_attn_mask, ctx_position_ids)
 
+        hooks = getattr(self, "nan_probe_boundary_hooks", None)
+        if hooks is not None:
+            hooks.register("perceiver.projected", projected)
+            hooks.register("perceiver.latents", latents)
+
         latent_position_ids = torch.arange(
             self.encoder.n_latents, device=ctx_features.device
         ).unsqueeze(0).tile(1, bsz if not self.layer_to_layer else bsz * self.num_layers)

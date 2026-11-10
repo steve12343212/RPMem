@@ -29,6 +29,7 @@ def tensor_finite_report(name: str, value: torch.Tensor | None) -> dict[str, Any
     report["min"] = float(as_float.min().item())
     report["max"] = float(as_float.max().item())
     report["mean"] = float(as_float.mean().item())
+    report["absmax"] = float(as_float.abs().max().item())
     if not finite:
         report["nan_count"] = int(torch.isnan(as_float).sum().item())
         report["inf_count"] = int(torch.isinf(as_float).sum().item())
@@ -83,20 +84,25 @@ def first_nonfinite(reports: list[dict[str, Any]]) -> dict[str, Any] | None:
 class BoundaryGradRecorder:
     """Record incoming grads at selected autograd boundaries (observe only)."""
 
-    def __init__(self) -> None:
+    def __init__(self, capture_names: Iterable[str] | None = None) -> None:
         self.events: list[dict[str, Any]] = []
         self._handles: list[torch.utils.hooks.RemovableHandle] = []
+        self.capture_names = set(capture_names or [])
+        self.captured: dict[str, torch.Tensor] = {}
 
     def clear(self) -> None:
         for handle in self._handles:
             handle.remove()
         self._handles.clear()
         self.events.clear()
+        self.captured.clear()
 
     def make_hook(self, name: str) -> Callable[[torch.Tensor], None]:
         def _hook(grad: torch.Tensor):
             report = tensor_finite_report(name, grad)
             self.events.append(report)
+            if name in self.capture_names:
+                self.captured[name] = grad.detach().clone()
 
         return _hook
 
@@ -107,6 +113,34 @@ class BoundaryGradRecorder:
 
     def first_bad(self) -> dict[str, Any] | None:
         return first_nonfinite(self.events)
+
+
+def named_param_grad_snapshot(
+    named_params: Iterable[tuple[str, torch.nn.Parameter]],
+    *,
+    only_nonfinite: bool = False,
+) -> dict[str, dict[str, Any]]:
+    """Finite-ness reports for parameter grads (cheap unless nonfinite)."""
+
+    out: dict[str, dict[str, Any]] = {}
+    for name, param in named_params:
+        grad = param.grad
+        if grad is None:
+            continue
+        finite = bool(torch.isfinite(grad).all().item())
+        if only_nonfinite and finite:
+            continue
+        if finite:
+            out[name] = {
+                "name": f"{name}.grad",
+                "finite": True,
+                "dtype": str(grad.dtype),
+                "shape": list(grad.shape),
+                "numel": int(grad.numel()),
+            }
+        else:
+            out[name] = tensor_finite_report(f"{name}.grad", grad)
+    return out
 
 
 class NanProbeLogger:

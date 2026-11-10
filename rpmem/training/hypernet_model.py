@@ -642,6 +642,23 @@ class HypernetModel(nn.Module):
         elif ctx_features.requires_grad:
             raise ValueError("cached context features must be detached")
 
+        capture = getattr(self, "nan_probe_capture", None)
+        if isinstance(capture, dict) and capture.get("enabled"):
+            payload = {
+                "ctx_features": ctx_features.detach().cpu().clone(),
+                "ctx_attn_mask": (
+                    None
+                    if ctx_attn_mask is None
+                    else ctx_attn_mask.detach().cpu().clone()
+                ),
+                "ctx_position_ids": (
+                    None
+                    if ctx_position_ids is None
+                    else ctx_position_ids.detach().cpu().clone()
+                ),
+            }
+            capture["inputs"] = payload
+
         # Perceiver is trainable in phase 1 and frozen explicitly by phase-2 code.
         from rpmem.device import autocast_context
 
