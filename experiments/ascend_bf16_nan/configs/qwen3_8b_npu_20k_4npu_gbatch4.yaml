@@ -1,0 +1,41 @@
+# Ascend 4x NPU Fixed-FKL on 20k sessions.
+# Global batch 4 (4 × 1 × accum 1) → ~20000/4 = 5000 steps/epoch; ~5 epochs → 25000 steps.
+
+n_layers: 36
+d_latent: 512
+lora_r: 8
+target_modules: [down_proj]
+per_layer_processing: true
+per_rank_gen: true
+num_pre_head_layers: 4
+n_latent_queries: 8
+num_blocks: 9
+
+base_model_path: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B
+ctx_encoder_path: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base
+
+max_ctx_len: 4096
+max_seq_len: 640
+use_packing: false
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+objective: offline_fkl
+
+lr: 4.0e-5
+weight_decay: 0.01
+warmup_steps: 100
+max_steps: 25000
+gradient_accumulation_steps: 1
+max_grad_norm: 1.0
+l1_reg_coef: 0.01
+use_per_ctx_average_loss: true
+lora_alpha: 32.0
+lora_dropout: 0.0
+
+save_steps: 1000
+save_training_state: true
+save_total_limit: 2
+logging_steps: 5
+dataloader_num_workers: 4
+seed: 42
+output_dir: outputs/compiler_qwen3_8b_npu_20k_4npu_gbatch4

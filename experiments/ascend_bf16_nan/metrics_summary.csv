@@ -1,0 +1,10 @@
+log,logged_steps,last_finite_step,last_finite_loss,first_nan_step,lr_at_nan
+rpmem_kv_20k_1npu.1.log,109,455,0.6965,460,4.00e-05
+rpmem_kv_20k_4npu_accum2.1.log,54,110,0.7008,115,3.99e-05
+rpmem_kv_20k_4npu_accum4.1.log,45,55,0.7606,60,3.99e-05
+rpmem_kv_20k_4npu_gbatch4.1.log,112,365,0.5964,370,3.97e-05
+rpmem_kv_20k_train_fp32.1.log,28,,,25,3.95e-05
+rpmem_nan_2npu.1.log,50,50,1.1497,,
+rpmem_nan_2npu_bigbatch.1.log,50,45,1.4251,46,3.96e-05
+rpmem_nan_long_1npu.1.log,200,200,0.6052,,
+rpmem_nan_short_1npu.1.log,40,40,1.6047,,

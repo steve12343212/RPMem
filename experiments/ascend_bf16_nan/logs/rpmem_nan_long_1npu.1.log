@@ -1,0 +1,338 @@
+################### env ###################
+#KUBERNETES_SERVICE_PORT_HTTPS=443
+#KUBERNETES_SERVICE_PORT=443
+#PYTHONUNBUFFERED=1
+#HOSTNAME=job-179431800656386225570-sunwenjie-master-0
+#NUMEXPR_NUM_THREADS=16
+#MASTER_PORT=23456
+#PWD=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+#VC_MASTER_NUM=1
+#GIT_SSL_NO_VERIFY=1
+#ASCEND_VISIBLE_DEVICES=5
+#VC_WORKER_HOSTS=
+#TZ=Asia/Shanghai
+#ASCEND_RUNTIME_OPTIONS=
+#OPENBLAS_NUM_THREADS=16
+#WORLD_SIZE=1
+#HOME=/aistor/sjtu/hpc_stor01/home/sunwenjie
+#KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+#JOB=1
+#LOG_FILE=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/logs/vc/rpmem_nan_long_1npu.JOB.log
+#VC_MASTER_HOSTS=job-179431800656386225570-sunwenjie-master-0.job-179431800656386225570-sunwenjie
+#GPU_NUM=1
+#VECLIB_NUM_THREADS=16
+#LORA_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen2.5-7B-Instruct
+#TOOLCHAIN_HOME=/usr/local/Ascend/ascend-toolkit/latest/toolkit
+#ASCEND_TOOLKIT_HOME=/usr/local/Ascend/ascend-toolkit/latest
+#VC_WORKER_NUM=0
+#MASTER_ADDR=job-179431800656386225570-sunwenjie-master-0.job-179431800656386225570-sunwenjie
+#PYTHONPATH=/usr/local/Ascend/ascend-toolkit/latest/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe:/usr/local/python3.10.15/lib/python3.10/site-packages:
+#USER=sunwenjie
+#SHLVL=0
+#KUBERNETES_PORT_443_TCP_PROTO=tcp
+#DEVICE_KIND=npu
+#KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+#ASCEND_OPP_PATH=/usr/local/Ascend/ascend-toolkit/latest/opp
+#LD_LIBRARY_PATH=/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64/plugin:/usr/local/Ascend/ascend-toolkit/latest/lib64:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/opskernel:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/nnengine:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/$(arch):/usr/local/python3.10.15/lib:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/add-ons:/usr/local/Ascend/driver/tools/hccn_tool:
+#ASCEND_AICPU_PATH=/usr/local/Ascend/ascend-toolkit/latest
+#RANK=0
+#GPU_PER_TASK=1
+#OMP_NUM_THREADS=16
+#KUBERNETES_SERVICE_HOST=10.96.0.1
+#KUBERNETES_PORT=tcp://10.96.0.1:443
+#KUBERNETES_PORT_443_TCP_PORT=443
+#JobID=job-179431800656386225570-sunwenjie
+#PATH=/usr/local/python3.10.15/bin:/usr/local/python3.10.15/lib/python3.10/site-packages/torch/bin:/usr/local/Ascend/ascend-toolkit/latest/bin:/usr/local/Ascend/ascend-toolkit/latest/compiler/ccec_compiler/bin:/usr/local/Ascend/ascend-toolkit/latest/tools/ccec_compiler/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#ASCEND_HOME_PATH=/usr/local/Ascend/ascend-toolkit/latest
+#MKL_NUM_THREADS=16
+#DEBIAN_FRONTEND=noninteractive
+#OLDPWD=/workspace
+#_=/usr/bin/env
+################### info ###################
+data now: 2026-11-10 21:40:13
+run on node: szaic-mlops-npu-0005
+###########################################
+
+RPMEM_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+PYTHON=/usr/bin/python (Python 3.10.15)
+RPMEM_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B (exists=yes)
+RPMEM_CTX_ENCODER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base (exists=yes)
+RPMEM_DATA_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem (exists=yes)
+DEVICE_KIND=npu ASCEND_VISIBLE_DEVICES=5 ASCEND_RT_VISIBLE_DEVICES=<unset>
+RPMEM_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+PYTHON=/usr/bin/python (Python 3.10.15)
+RPMEM_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B (exists=yes)
+RPMEM_CTX_ENCODER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base (exists=yes)
+RPMEM_DATA_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem (exists=yes)
+DEVICE_KIND=npu ASCEND_VISIBLE_DEVICES=5 ASCEND_RT_VISIBLE_DEVICES=<unset>
+[rpmem deps] using /usr/bin/python
+  /tmp/pip-build-env-aud3ikls/overlay/lib/python3.10/site-packages/setuptools/command/editable_wheel.py:354: BuildBackendWarning: Editable installation.
+  !!
+  
+          ********************************************************************************
+          Please be careful with folders in your working directory with the same
+          name as your package as they may take precedence during imports.
+          ********************************************************************************
+  
+  !!
+    with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+torch 2.6.0+cpu
+transformers 4.57.6
+accelerate 1.4.0
+rpmem 0.1.0
+device npu count 1
+[rpmem deps] ok
+NAN_REPRO 1NPU CONFIG=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_nan_long.yaml DATA=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_nan_repro/train_500.jsonl TEACHER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_500 OUT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long
+visible ASCEND_VISIBLE_DEVICES=5 ASCEND_RT_VISIBLE_DEVICES=<unset>
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+2026-11-10 21:41:49,062 [INFO] Training hypernetwork, output: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long
+2026-11-10 21:41:49,066 [INFO] Args: {'config': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_nan_long.yaml', 'base_model_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B', 'ctx_encoder_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base', 'base_model_device_map': None, 'model_parallel_data_parallel': False, 'from_checkpoint': None, 'resume_from_checkpoint': None, 'perceiver_init_checkpoint': None, 'trainable_scope': 'perceiver_and_head', 'use_flash_attn': False, 'base_model_gradient_checkpointing': False, 'n_layers': 36, 'd_latent': 512, 'lora_r': 8, 'target_modules': ['down_proj'], 'per_layer_processing': True, 'per_rank_gen': True, 'num_pre_head_layers': 4, 'n_latent_queries': 8, 'num_blocks': 9, 'train_data': ['/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_nan_repro/train_500.jsonl'], 'val_data': None, 'max_ctx_len': 4096, 'max_seq_len': 640, 'per_device_train_batch_size': 1, 'per_device_eval_batch_size': 1, 'use_packing': False, 'teacher_logprobs_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_500', 'val_teacher_logprobs_dir': None, 'objective': 'offline_fkl', 'opcd_loss_mode': 'student_topk_reverse_kl', 'opcd_top_k': 32, 'opcd_kl_chunk_size': 16, 'opcd_rollout_max_new_tokens': 128, 'opcd_max_teacher_seq_len': 4864, 'opcd_queries_per_session': 8, 'opcd_context_lift_every': 50, 'opcd_context_lift_eval_batches': 32, 'quality_eval_sessions': 0, 'quality_eval_queries_per_session': 8, 'quality_eval_max_new_tokens': 128, 'lr': 4e-05, 'weight_decay': 0.01, 'warmup_steps': 20, 'max_steps': 200, 'max_epochs': None, 'gradient_accumulation_steps': 2, 'max_grad_norm': 1.0, 'l1_reg_coef': 0.01, 'use_per_ctx_average_loss': True, 'lora_alpha': 32.0, 'lora_dropout': 0.0, 'output_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long', 'tensorboard_dir': None, 'save_steps': 50, 'eval_steps': 50, 'save_training_state': True, 'save_epoch_boundaries': True, 'save_total_limit': 1, 'logging_steps': 1, 'dataloader_num_workers': 2, 'seed': 42, 'preflight_stop_after_step': None, 'selected_endpoint_step': None}
+`torch_dtype` is deprecated! Use `dtype` instead!
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:00,  9.56it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:00,  9.47it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  9.37it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:00<00:00, 13.21it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:00<00:00, 11.82it/s]
+2026-11-10 21:42:08,850 [INFO] Trainable scope: perceiver_and_head; params: 657,345,088
+2026-11-10 21:42:09,662 [INFO] Indexed 500 training samples without materializing the rows
+2026-11-10 21:42:09,734 [INFO] Distillation mode: teacher logprobs from /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_500
+2026-11-10 21:42:09,735 [INFO] Phase 1 objective: offline_fkl
+2026-11-10 21:42:11,257 [INFO] TensorBoard logging to: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/tb_logs
+2026-11-10 21:42:11,266 [INFO] Starting training: 200 optimizer steps, grad_accum=2
+2026-11-10 21:42:14,462 [INFO] Step 1/200 | loss=2.4218 | lr=2.00e-06 | speed=0.3 steps/s
+2026-11-10 21:42:15,737 [INFO] Step 2/200 | loss=2.4190 | lr=4.00e-06 | speed=0.4 steps/s
+2026-11-10 21:42:16,832 [INFO] Step 3/200 | loss=2.8128 | lr=6.00e-06 | speed=0.5 steps/s
+2026-11-10 21:42:17,924 [INFO] Step 4/200 | loss=2.8541 | lr=8.00e-06 | speed=0.6 steps/s
+2026-11-10 21:42:19,095 [INFO] Step 5/200 | loss=2.5207 | lr=1.00e-05 | speed=0.6 steps/s
+2026-11-10 21:42:20,236 [INFO] Step 6/200 | loss=2.0897 | lr=1.20e-05 | speed=0.7 steps/s
+2026-11-10 21:42:21,363 [INFO] Step 7/200 | loss=2.0635 | lr=1.40e-05 | speed=0.7 steps/s
+2026-11-10 21:42:22,583 [INFO] Step 8/200 | loss=3.0302 | lr=1.60e-05 | speed=0.7 steps/s
+2026-11-10 21:42:23,675 [INFO] Step 9/200 | loss=3.7616 | lr=1.80e-05 | speed=0.7 steps/s
+2026-11-10 21:42:24,898 [INFO] Step 10/200 | loss=2.7876 | lr=2.00e-05 | speed=0.7 steps/s
+2026-11-10 21:42:26,216 [INFO] Step 11/200 | loss=2.5003 | lr=2.20e-05 | speed=0.7 steps/s
+2026-11-10 21:42:27,523 [INFO] Step 12/200 | loss=1.8255 | lr=2.40e-05 | speed=0.7 steps/s
+2026-11-10 21:42:28,632 [INFO] Step 13/200 | loss=2.8391 | lr=2.60e-05 | speed=0.7 steps/s
+2026-11-10 21:42:29,735 [INFO] Step 14/200 | loss=2.1266 | lr=2.80e-05 | speed=0.8 steps/s
+2026-11-10 21:42:30,823 [INFO] Step 15/200 | loss=2.7706 | lr=3.00e-05 | speed=0.8 steps/s
+2026-11-10 21:42:31,888 [INFO] Step 16/200 | loss=3.6024 | lr=3.20e-05 | speed=0.8 steps/s
+2026-11-10 21:42:33,058 [INFO] Step 17/200 | loss=1.8131 | lr=3.40e-05 | speed=0.8 steps/s
+2026-11-10 21:42:34,248 [INFO] Step 18/200 | loss=1.6600 | lr=3.60e-05 | speed=0.8 steps/s
+2026-11-10 21:42:35,394 [INFO] Step 19/200 | loss=1.8637 | lr=3.80e-05 | speed=0.8 steps/s
+2026-11-10 21:42:36,646 [INFO] Step 20/200 | loss=2.2292 | lr=4.00e-05 | speed=0.8 steps/s
+2026-11-10 21:42:37,736 [INFO] Step 21/200 | loss=2.3547 | lr=4.00e-05 | speed=0.8 steps/s
+2026-11-10 21:42:38,844 [INFO] Step 22/200 | loss=4.0837 | lr=4.00e-05 | speed=0.8 steps/s
+2026-11-10 21:42:40,004 [INFO] Step 23/200 | loss=1.6677 | lr=4.00e-05 | speed=0.8 steps/s
+2026-11-10 21:42:41,072 [INFO] Step 24/200 | loss=1.8935 | lr=4.00e-05 | speed=0.8 steps/s
+2026-11-10 21:42:42,157 [INFO] Step 25/200 | loss=1.2968 | lr=3.99e-05 | speed=0.8 steps/s
+2026-11-10 21:42:43,582 [INFO] Step 26/200 | loss=1.6055 | lr=3.99e-05 | speed=0.8 steps/s
+2026-11-10 21:42:44,688 [INFO] Step 27/200 | loss=1.2327 | lr=3.99e-05 | speed=0.8 steps/s
+2026-11-10 21:42:45,777 [INFO] Step 28/200 | loss=1.4235 | lr=3.98e-05 | speed=0.8 steps/s
+2026-11-10 21:42:46,914 [INFO] Step 29/200 | loss=0.8755 | lr=3.98e-05 | speed=0.8 steps/s
+2026-11-10 21:42:48,010 [INFO] Step 30/200 | loss=1.3272 | lr=3.97e-05 | speed=0.8 steps/s
+2026-11-10 21:42:49,099 [INFO] Step 31/200 | loss=1.0486 | lr=3.96e-05 | speed=0.8 steps/s
+2026-11-10 21:42:50,241 [INFO] Step 32/200 | loss=1.1146 | lr=3.96e-05 | speed=0.8 steps/s
+2026-11-10 21:42:51,415 [INFO] Step 33/200 | loss=1.3131 | lr=3.95e-05 | speed=0.8 steps/s
+2026-11-10 21:42:52,503 [INFO] Step 34/200 | loss=1.6342 | lr=3.94e-05 | speed=0.8 steps/s
+2026-11-10 21:42:53,662 [INFO] Step 35/200 | loss=1.7373 | lr=3.93e-05 | speed=0.8 steps/s
+2026-11-10 21:42:54,760 [INFO] Step 36/200 | loss=0.9517 | lr=3.92e-05 | speed=0.8 steps/s
+2026-11-10 21:42:55,857 [INFO] Step 37/200 | loss=1.0600 | lr=3.91e-05 | speed=0.8 steps/s
+2026-11-10 21:42:56,980 [INFO] Step 38/200 | loss=1.3093 | lr=3.90e-05 | speed=0.8 steps/s
+2026-11-10 21:42:58,125 [INFO] Step 39/200 | loss=0.9617 | lr=3.89e-05 | speed=0.8 steps/s
+2026-11-10 21:42:59,264 [INFO] Step 40/200 | loss=1.1579 | lr=3.88e-05 | speed=0.8 steps/s
+2026-11-10 21:43:00,406 [INFO] Step 41/200 | loss=0.5190 | lr=3.87e-05 | speed=0.8 steps/s
+2026-11-10 21:43:01,550 [INFO] Step 42/200 | loss=1.1703 | lr=3.85e-05 | speed=0.8 steps/s
+2026-11-10 21:43:02,721 [INFO] Step 43/200 | loss=0.6900 | lr=3.84e-05 | speed=0.8 steps/s
+2026-11-10 21:43:03,886 [INFO] Step 44/200 | loss=0.8480 | lr=3.83e-05 | speed=0.8 steps/s
+2026-11-10 21:43:04,984 [INFO] Step 45/200 | loss=0.8172 | lr=3.81e-05 | speed=0.8 steps/s
+2026-11-10 21:43:06,039 [INFO] Step 46/200 | loss=1.7075 | lr=3.80e-05 | speed=0.8 steps/s
+2026-11-10 21:43:07,143 [INFO] Step 47/200 | loss=1.2682 | lr=3.78e-05 | speed=0.8 steps/s
+2026-11-10 21:43:08,228 [INFO] Step 48/200 | loss=0.6628 | lr=3.77e-05 | speed=0.8 steps/s
+2026-11-10 21:43:09,334 [INFO] Step 49/200 | loss=1.4364 | lr=3.75e-05 | speed=0.8 steps/s
+2026-11-10 21:43:10,514 [INFO] Step 50/200 | loss=0.5430 | lr=3.73e-05 | speed=0.8 steps/s
+2026-11-10 21:43:22,254 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-50
+2026-11-10 21:43:23,346 [INFO] Step 51/200 | loss=1.1351 | lr=3.71e-05 | speed=0.7 steps/s
+2026-11-10 21:43:24,579 [INFO] Step 52/200 | loss=0.7622 | lr=3.70e-05 | speed=0.7 steps/s
+2026-11-10 21:43:25,649 [INFO] Step 53/200 | loss=1.1703 | lr=3.68e-05 | speed=0.7 steps/s
+2026-11-10 21:43:26,735 [INFO] Step 54/200 | loss=0.5928 | lr=3.66e-05 | speed=0.7 steps/s
+2026-11-10 21:43:27,827 [INFO] Step 55/200 | loss=1.2296 | lr=3.64e-05 | speed=0.7 steps/s
+2026-11-10 21:43:29,291 [INFO] Step 56/200 | loss=0.7833 | lr=3.62e-05 | speed=0.7 steps/s
+2026-11-10 21:43:30,561 [INFO] Step 57/200 | loss=0.8260 | lr=3.60e-05 | speed=0.7 steps/s
+2026-11-10 21:43:31,739 [INFO] Step 58/200 | loss=0.7345 | lr=3.58e-05 | speed=0.7 steps/s
+2026-11-10 21:43:32,979 [INFO] Step 59/200 | loss=1.3547 | lr=3.55e-05 | speed=0.7 steps/s
+2026-11-10 21:43:34,167 [INFO] Step 60/200 | loss=0.4757 | lr=3.53e-05 | speed=0.7 steps/s
+2026-11-10 21:43:35,482 [INFO] Step 61/200 | loss=0.8403 | lr=3.51e-05 | speed=0.7 steps/s
+2026-11-10 21:43:36,735 [INFO] Step 62/200 | loss=1.4812 | lr=3.49e-05 | speed=0.7 steps/s
+2026-11-10 21:43:37,997 [INFO] Step 63/200 | loss=0.9260 | lr=3.46e-05 | speed=0.7 steps/s
+2026-11-10 21:43:39,262 [INFO] Step 64/200 | loss=0.5632 | lr=3.44e-05 | speed=0.7 steps/s
+2026-11-10 21:43:40,486 [INFO] Step 65/200 | loss=0.8187 | lr=3.41e-05 | speed=0.7 steps/s
+2026-11-10 21:43:41,748 [INFO] Step 66/200 | loss=0.6897 | lr=3.39e-05 | speed=0.7 steps/s
+2026-11-10 21:43:43,187 [INFO] Step 67/200 | loss=0.8027 | lr=3.36e-05 | speed=0.7 steps/s
+2026-11-10 21:43:44,547 [INFO] Step 68/200 | loss=1.0291 | lr=3.34e-05 | speed=0.7 steps/s
+2026-11-10 21:43:45,812 [INFO] Step 69/200 | loss=0.9367 | lr=3.31e-05 | speed=0.7 steps/s
+2026-11-10 21:43:47,027 [INFO] Step 70/200 | loss=0.5333 | lr=3.29e-05 | speed=0.7 steps/s
+2026-11-10 21:43:48,203 [INFO] Step 71/200 | loss=0.5268 | lr=3.26e-05 | speed=0.7 steps/s
+2026-11-10 21:43:49,432 [INFO] Step 72/200 | loss=0.6287 | lr=3.23e-05 | speed=0.7 steps/s
+2026-11-10 21:43:50,680 [INFO] Step 73/200 | loss=0.5354 | lr=3.20e-05 | speed=0.7 steps/s
+2026-11-10 21:43:52,153 [INFO] Step 74/200 | loss=1.0407 | lr=3.18e-05 | speed=0.7 steps/s
+2026-11-10 21:43:53,416 [INFO] Step 75/200 | loss=0.8637 | lr=3.15e-05 | speed=0.7 steps/s
+2026-11-10 21:43:54,749 [INFO] Step 76/200 | loss=0.9621 | lr=3.12e-05 | speed=0.7 steps/s
+2026-11-10 21:43:55,993 [INFO] Step 77/200 | loss=0.9586 | lr=3.09e-05 | speed=0.7 steps/s
+2026-11-10 21:43:57,297 [INFO] Step 78/200 | loss=0.8660 | lr=3.06e-05 | speed=0.7 steps/s
+2026-11-10 21:43:58,538 [INFO] Step 79/200 | loss=0.6733 | lr=3.03e-05 | speed=0.7 steps/s
+2026-11-10 21:43:59,778 [INFO] Step 80/200 | loss=0.9059 | lr=3.00e-05 | speed=0.7 steps/s
+2026-11-10 21:44:01,027 [INFO] Step 81/200 | loss=1.1901 | lr=2.97e-05 | speed=0.7 steps/s
+2026-11-10 21:44:02,259 [INFO] Step 82/200 | loss=0.8400 | lr=2.94e-05 | speed=0.7 steps/s
+2026-11-10 21:44:03,466 [INFO] Step 83/200 | loss=0.7751 | lr=2.91e-05 | speed=0.7 steps/s
+2026-11-10 21:44:04,673 [INFO] Step 84/200 | loss=0.7196 | lr=2.88e-05 | speed=0.7 steps/s
+2026-11-10 21:44:05,922 [INFO] Step 85/200 | loss=3.7158 | lr=2.85e-05 | speed=0.7 steps/s
+2026-11-10 21:44:07,194 [INFO] Step 86/200 | loss=0.7880 | lr=2.81e-05 | speed=0.7 steps/s
+2026-11-10 21:44:08,595 [INFO] Step 87/200 | loss=0.7185 | lr=2.78e-05 | speed=0.7 steps/s
+2026-11-10 21:44:09,828 [INFO] Step 88/200 | loss=0.6439 | lr=2.75e-05 | speed=0.7 steps/s
+2026-11-10 21:44:11,089 [INFO] Step 89/200 | loss=0.6472 | lr=2.72e-05 | speed=0.7 steps/s
+2026-11-10 21:44:12,339 [INFO] Step 90/200 | loss=0.7018 | lr=2.68e-05 | speed=0.7 steps/s
+2026-11-10 21:44:13,602 [INFO] Step 91/200 | loss=0.4985 | lr=2.65e-05 | speed=0.7 steps/s
+2026-11-10 21:44:14,821 [INFO] Step 92/200 | loss=0.5375 | lr=2.62e-05 | speed=0.7 steps/s
+2026-11-10 21:44:16,070 [INFO] Step 93/200 | loss=0.6414 | lr=2.58e-05 | speed=0.7 steps/s
+2026-11-10 21:44:17,351 [INFO] Step 94/200 | loss=0.4867 | lr=2.55e-05 | speed=0.7 steps/s
+2026-11-10 21:44:18,608 [INFO] Step 95/200 | loss=0.6295 | lr=2.52e-05 | speed=0.7 steps/s
+2026-11-10 21:44:19,928 [INFO] Step 96/200 | loss=0.4218 | lr=2.48e-05 | speed=0.7 steps/s
+2026-11-10 21:44:21,195 [INFO] Step 97/200 | loss=0.5424 | lr=2.45e-05 | speed=0.7 steps/s
+2026-11-10 21:44:22,585 [INFO] Step 98/200 | loss=0.7593 | lr=2.42e-05 | speed=0.7 steps/s
+2026-11-10 21:44:23,812 [INFO] Step 99/200 | loss=0.8764 | lr=2.38e-05 | speed=0.7 steps/s
+2026-11-10 21:44:25,078 [INFO] Step 100/200 | loss=1.0959 | lr=2.35e-05 | speed=0.7 steps/s
+2026-11-10 21:44:37,394 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-100
+2026-11-10 21:44:37,425 [INFO] Pruned old checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-50
+2026-11-10 21:44:38,688 [INFO] Step 101/200 | loss=0.8883 | lr=2.31e-05 | speed=0.7 steps/s
+2026-11-10 21:44:39,996 [INFO] Step 102/200 | loss=0.7491 | lr=2.28e-05 | speed=0.7 steps/s
+2026-11-10 21:44:41,299 [INFO] Step 103/200 | loss=1.1029 | lr=2.24e-05 | speed=0.7 steps/s
+2026-11-10 21:44:42,545 [INFO] Step 104/200 | loss=0.5397 | lr=2.21e-05 | speed=0.7 steps/s
+2026-11-10 21:44:44,217 [INFO] Step 105/200 | loss=0.4853 | lr=2.17e-05 | speed=0.7 steps/s
+2026-11-10 21:44:45,434 [INFO] Step 106/200 | loss=0.9254 | lr=2.14e-05 | speed=0.7 steps/s
+2026-11-10 21:44:46,655 [INFO] Step 107/200 | loss=0.9077 | lr=2.10e-05 | speed=0.7 steps/s
+2026-11-10 21:44:47,890 [INFO] Step 108/200 | loss=0.4787 | lr=2.07e-05 | speed=0.7 steps/s
+2026-11-10 21:44:49,106 [INFO] Step 109/200 | loss=1.0126 | lr=2.03e-05 | speed=0.7 steps/s
+2026-11-10 21:44:50,235 [INFO] Step 110/200 | loss=0.8328 | lr=2.00e-05 | speed=0.7 steps/s
+2026-11-10 21:44:51,446 [INFO] Step 111/200 | loss=0.5967 | lr=1.97e-05 | speed=0.7 steps/s
+2026-11-10 21:44:52,677 [INFO] Step 112/200 | loss=0.4042 | lr=1.93e-05 | speed=0.7 steps/s
+2026-11-10 21:44:53,916 [INFO] Step 113/200 | loss=0.8253 | lr=1.90e-05 | speed=0.7 steps/s
+2026-11-10 21:44:55,183 [INFO] Step 114/200 | loss=0.5485 | lr=1.86e-05 | speed=0.7 steps/s
+2026-11-10 21:44:56,445 [INFO] Step 115/200 | loss=0.6895 | lr=1.83e-05 | speed=0.7 steps/s
+2026-11-10 21:44:58,149 [INFO] Step 116/200 | loss=0.7905 | lr=1.79e-05 | speed=0.7 steps/s
+2026-11-10 21:44:59,372 [INFO] Step 117/200 | loss=0.8598 | lr=1.76e-05 | speed=0.7 steps/s
+2026-11-10 21:45:00,572 [INFO] Step 118/200 | loss=0.6845 | lr=1.72e-05 | speed=0.7 steps/s
+2026-11-10 21:45:01,816 [INFO] Step 119/200 | loss=0.8153 | lr=1.69e-05 | speed=0.7 steps/s
+2026-11-10 21:45:03,081 [INFO] Step 120/200 | loss=0.4151 | lr=1.65e-05 | speed=0.7 steps/s
+2026-11-10 21:45:04,364 [INFO] Step 121/200 | loss=0.6309 | lr=1.62e-05 | speed=0.7 steps/s
+2026-11-10 21:45:05,652 [INFO] Step 122/200 | loss=0.7631 | lr=1.58e-05 | speed=0.7 steps/s
+2026-11-10 21:45:06,859 [INFO] Step 123/200 | loss=0.7165 | lr=1.55e-05 | speed=0.7 steps/s
+2026-11-10 21:45:08,127 [INFO] Step 124/200 | loss=0.4112 | lr=1.52e-05 | speed=0.7 steps/s
+2026-11-10 21:45:09,365 [INFO] Step 125/200 | loss=0.5089 | lr=1.48e-05 | speed=0.7 steps/s
+2026-11-10 21:45:10,613 [INFO] Step 126/200 | loss=0.7159 | lr=1.45e-05 | speed=0.7 steps/s
+2026-11-10 21:45:11,950 [INFO] Step 127/200 | loss=0.5333 | lr=1.42e-05 | speed=0.7 steps/s
+2026-11-10 21:45:13,314 [INFO] Step 128/200 | loss=0.9986 | lr=1.38e-05 | speed=0.7 steps/s
+2026-11-10 21:45:14,567 [INFO] Step 129/200 | loss=0.5430 | lr=1.35e-05 | speed=0.7 steps/s
+2026-11-10 21:45:15,794 [INFO] Step 130/200 | loss=0.6179 | lr=1.32e-05 | speed=0.7 steps/s
+2026-11-10 21:45:17,011 [INFO] Step 131/200 | loss=0.7498 | lr=1.28e-05 | speed=0.7 steps/s
+2026-11-10 21:45:18,275 [INFO] Step 132/200 | loss=1.1993 | lr=1.25e-05 | speed=0.7 steps/s
+2026-11-10 21:45:19,539 [INFO] Step 133/200 | loss=0.5611 | lr=1.22e-05 | speed=0.7 steps/s
+2026-11-10 21:45:20,773 [INFO] Step 134/200 | loss=0.3898 | lr=1.19e-05 | speed=0.7 steps/s
+2026-11-10 21:45:21,987 [INFO] Step 135/200 | loss=1.0405 | lr=1.15e-05 | speed=0.7 steps/s
+2026-11-10 21:45:23,261 [INFO] Step 136/200 | loss=0.5775 | lr=1.12e-05 | speed=0.7 steps/s
+2026-11-10 21:45:24,473 [INFO] Step 137/200 | loss=0.3770 | lr=1.09e-05 | speed=0.7 steps/s
+2026-11-10 21:45:25,726 [INFO] Step 138/200 | loss=0.9437 | lr=1.06e-05 | speed=0.7 steps/s
+2026-11-10 21:45:26,972 [INFO] Step 139/200 | loss=0.3890 | lr=1.03e-05 | speed=0.7 steps/s
+2026-11-10 21:45:28,126 [INFO] Step 140/200 | loss=0.9310 | lr=1.00e-05 | speed=0.7 steps/s
+2026-11-10 21:45:29,420 [INFO] Step 141/200 | loss=0.6138 | lr=9.70e-06 | speed=0.7 steps/s
+2026-11-10 21:45:30,634 [INFO] Step 142/200 | loss=0.4020 | lr=9.40e-06 | speed=0.7 steps/s
+2026-11-10 21:45:31,886 [INFO] Step 143/200 | loss=0.5721 | lr=9.11e-06 | speed=0.7 steps/s
+2026-11-10 21:45:33,161 [INFO] Step 144/200 | loss=1.2870 | lr=8.82e-06 | speed=0.7 steps/s
+2026-11-10 21:45:34,384 [INFO] Step 145/200 | loss=0.7333 | lr=8.53e-06 | speed=0.7 steps/s
+2026-11-10 21:45:35,815 [INFO] Step 146/200 | loss=0.9348 | lr=8.24e-06 | speed=0.7 steps/s
+2026-11-10 21:45:37,038 [INFO] Step 147/200 | loss=1.0184 | lr=7.96e-06 | speed=0.7 steps/s
+2026-11-10 21:45:38,292 [INFO] Step 148/200 | loss=0.6214 | lr=7.69e-06 | speed=0.7 steps/s
+2026-11-10 21:45:39,600 [INFO] Step 149/200 | loss=0.7758 | lr=7.41e-06 | speed=0.7 steps/s
+2026-11-10 21:45:40,845 [INFO] Step 150/200 | loss=0.6625 | lr=7.14e-06 | speed=0.7 steps/s
+2026-11-10 21:45:53,561 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-150
+2026-11-10 21:45:53,600 [INFO] Pruned old checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-100
+2026-11-10 21:45:54,795 [INFO] Step 151/200 | loss=0.6659 | lr=6.88e-06 | speed=0.7 steps/s
+2026-11-10 21:45:56,014 [INFO] Step 152/200 | loss=0.8534 | lr=6.62e-06 | speed=0.7 steps/s
+2026-11-10 21:45:57,251 [INFO] Step 153/200 | loss=0.5535 | lr=6.36e-06 | speed=0.7 steps/s
+2026-11-10 21:45:58,532 [INFO] Step 154/200 | loss=1.0169 | lr=6.11e-06 | speed=0.7 steps/s
+2026-11-10 21:45:59,731 [INFO] Step 155/200 | loss=0.4688 | lr=5.86e-06 | speed=0.7 steps/s
+2026-11-10 21:46:01,202 [INFO] Step 156/200 | loss=0.5126 | lr=5.61e-06 | speed=0.7 steps/s
+2026-11-10 21:46:02,520 [INFO] Step 157/200 | loss=0.5276 | lr=5.37e-06 | speed=0.7 steps/s
+2026-11-10 21:46:03,744 [INFO] Step 158/200 | loss=0.8693 | lr=5.14e-06 | speed=0.7 steps/s
+2026-11-10 21:46:05,017 [INFO] Step 159/200 | loss=0.7200 | lr=4.91e-06 | speed=0.7 steps/s
+2026-11-10 21:46:06,439 [INFO] Step 160/200 | loss=0.6888 | lr=4.68e-06 | speed=0.7 steps/s
+2026-11-10 21:46:07,784 [INFO] Step 161/200 | loss=0.5920 | lr=4.46e-06 | speed=0.7 steps/s
+2026-11-10 21:46:09,062 [INFO] Step 162/200 | loss=1.0233 | lr=4.24e-06 | speed=0.7 steps/s
+2026-11-10 21:46:10,230 [INFO] Step 163/200 | loss=0.6278 | lr=4.03e-06 | speed=0.7 steps/s
+2026-11-10 21:46:11,571 [INFO] Step 164/200 | loss=0.7975 | lr=3.82e-06 | speed=0.7 steps/s
+2026-11-10 21:46:12,890 [INFO] Step 165/200 | loss=2.4381 | lr=3.62e-06 | speed=0.7 steps/s
+2026-11-10 21:46:14,045 [INFO] Step 166/200 | loss=0.3708 | lr=3.42e-06 | speed=0.7 steps/s
+2026-11-10 21:46:15,299 [INFO] Step 167/200 | loss=0.5992 | lr=3.23e-06 | speed=0.7 steps/s
+2026-11-10 21:46:16,569 [INFO] Step 168/200 | loss=0.3639 | lr=3.04e-06 | speed=0.7 steps/s
+2026-11-10 21:46:17,751 [INFO] Step 169/200 | loss=1.0952 | lr=2.86e-06 | speed=0.7 steps/s
+2026-11-10 21:46:19,002 [INFO] Step 170/200 | loss=0.8942 | lr=2.68e-06 | speed=0.7 steps/s
+2026-11-10 21:46:20,271 [INFO] Step 171/200 | loss=0.6438 | lr=2.51e-06 | speed=0.7 steps/s
+2026-11-10 21:46:21,548 [INFO] Step 172/200 | loss=0.8112 | lr=2.34e-06 | speed=0.7 steps/s
+2026-11-10 21:46:22,762 [INFO] Step 173/200 | loss=0.9141 | lr=2.18e-06 | speed=0.7 steps/s
+2026-11-10 21:46:24,011 [INFO] Step 174/200 | loss=0.5309 | lr=2.02e-06 | speed=0.7 steps/s
+2026-11-10 21:46:25,286 [INFO] Step 175/200 | loss=0.4694 | lr=1.87e-06 | speed=0.7 steps/s
+2026-11-10 21:46:26,540 [INFO] Step 176/200 | loss=0.4635 | lr=1.73e-06 | speed=0.7 steps/s
+2026-11-10 21:46:27,780 [INFO] Step 177/200 | loss=0.9063 | lr=1.59e-06 | speed=0.7 steps/s
+2026-11-10 21:46:29,048 [INFO] Step 178/200 | loss=0.6124 | lr=1.46e-06 | speed=0.7 steps/s
+2026-11-10 21:46:30,279 [INFO] Step 179/200 | loss=0.5554 | lr=1.33e-06 | speed=0.7 steps/s
+2026-11-10 21:46:31,510 [INFO] Step 180/200 | loss=0.5215 | lr=1.21e-06 | speed=0.7 steps/s
+2026-11-10 21:46:33,206 [INFO] Step 181/200 | loss=0.5811 | lr=1.09e-06 | speed=0.7 steps/s
+2026-11-10 21:46:34,547 [INFO] Step 182/200 | loss=0.6455 | lr=9.79e-07 | speed=0.7 steps/s
+2026-11-10 21:46:35,938 [INFO] Step 183/200 | loss=0.6335 | lr=8.74e-07 | speed=0.7 steps/s
+2026-11-10 21:46:37,168 [INFO] Step 184/200 | loss=0.5404 | lr=7.75e-07 | speed=0.7 steps/s
+2026-11-10 21:46:38,430 [INFO] Step 185/200 | loss=0.8982 | lr=6.81e-07 | speed=0.7 steps/s
+2026-11-10 21:46:39,696 [INFO] Step 186/200 | loss=0.8461 | lr=5.94e-07 | speed=0.7 steps/s
+2026-11-10 21:46:40,843 [INFO] Step 187/200 | loss=0.8072 | lr=5.13e-07 | speed=0.7 steps/s
+2026-11-10 21:46:42,177 [INFO] Step 188/200 | loss=0.6081 | lr=4.37e-07 | speed=0.7 steps/s
+2026-11-10 21:46:43,554 [INFO] Step 189/200 | loss=0.3982 | lr=3.67e-07 | speed=0.7 steps/s
+2026-11-10 21:46:44,788 [INFO] Step 190/200 | loss=0.5708 | lr=3.04e-07 | speed=0.7 steps/s
+2026-11-10 21:46:46,076 [INFO] Step 191/200 | loss=0.5001 | lr=2.46e-07 | speed=0.7 steps/s
+2026-11-10 21:46:47,336 [INFO] Step 192/200 | loss=0.8325 | lr=1.95e-07 | speed=0.7 steps/s
+2026-11-10 21:46:48,611 [INFO] Step 193/200 | loss=0.3802 | lr=1.49e-07 | speed=0.7 steps/s
+2026-11-10 21:46:50,061 [INFO] Step 194/200 | loss=0.9221 | lr=1.10e-07 | speed=0.7 steps/s
+2026-11-10 21:46:51,371 [INFO] Step 195/200 | loss=0.6001 | lr=7.61e-08 | speed=0.7 steps/s
+2026-11-10 21:46:52,657 [INFO] Step 196/200 | loss=0.7034 | lr=4.87e-08 | speed=0.7 steps/s
+2026-11-10 21:46:53,919 [INFO] Step 197/200 | loss=0.4203 | lr=2.74e-08 | speed=0.7 steps/s
+2026-11-10 21:46:55,194 [INFO] Step 198/200 | loss=0.5607 | lr=1.22e-08 | speed=0.7 steps/s
+2026-11-10 21:46:56,349 [INFO] Step 199/200 | loss=0.9455 | lr=3.05e-09 | speed=0.7 steps/s
+2026-11-10 21:46:57,584 [INFO] Step 200/200 | loss=0.6052 | lr=0.00e+00 | speed=0.7 steps/s
+2026-11-10 21:47:10,468 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-200
+2026-11-10 21:47:10,499 [INFO] Pruned old checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/checkpoint-150
+2026-11-10 21:47:15,755 [INFO] Training complete. Final checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long/pytorch_model.bin
+2026-11-10 21:47:15,755 [INFO] Total time: 304.5s, avg_loss: 1.0173
+NAN_REPRO DONE -> /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_long

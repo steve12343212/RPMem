@@ -1,0 +1,174 @@
+################### env ###################
+#KUBERNETES_SERVICE_PORT_HTTPS=443
+#KUBERNETES_SERVICE_PORT=443
+#PYTHONUNBUFFERED=1
+#HOSTNAME=job-179431800324372022235-sunwenjie-master-0
+#NUMEXPR_NUM_THREADS=16
+#MASTER_PORT=23456
+#PWD=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+#VC_MASTER_NUM=1
+#GIT_SSL_NO_VERIFY=1
+#ASCEND_VISIBLE_DEVICES=4
+#VC_WORKER_HOSTS=
+#TZ=Asia/Shanghai
+#ASCEND_RUNTIME_OPTIONS=
+#OPENBLAS_NUM_THREADS=16
+#WORLD_SIZE=1
+#HOME=/aistor/sjtu/hpc_stor01/home/sunwenjie
+#KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+#JOB=1
+#LOG_FILE=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/logs/vc/rpmem_nan_short_1npu.JOB.log
+#VC_MASTER_HOSTS=job-179431800324372022235-sunwenjie-master-0.job-179431800324372022235-sunwenjie
+#GPU_NUM=1
+#VECLIB_NUM_THREADS=16
+#LORA_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen2.5-7B-Instruct
+#TOOLCHAIN_HOME=/usr/local/Ascend/ascend-toolkit/latest/toolkit
+#ASCEND_TOOLKIT_HOME=/usr/local/Ascend/ascend-toolkit/latest
+#VC_WORKER_NUM=0
+#MASTER_ADDR=job-179431800324372022235-sunwenjie-master-0.job-179431800324372022235-sunwenjie
+#PYTHONPATH=/usr/local/Ascend/ascend-toolkit/latest/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe:/usr/local/python3.10.15/lib/python3.10/site-packages:
+#USER=sunwenjie
+#SHLVL=0
+#KUBERNETES_PORT_443_TCP_PROTO=tcp
+#DEVICE_KIND=npu
+#KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+#ASCEND_OPP_PATH=/usr/local/Ascend/ascend-toolkit/latest/opp
+#LD_LIBRARY_PATH=/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64/plugin:/usr/local/Ascend/ascend-toolkit/latest/lib64:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/opskernel:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/nnengine:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/$(arch):/usr/local/python3.10.15/lib:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/add-ons:/usr/local/Ascend/driver/tools/hccn_tool:
+#ASCEND_AICPU_PATH=/usr/local/Ascend/ascend-toolkit/latest
+#RANK=0
+#GPU_PER_TASK=1
+#OMP_NUM_THREADS=16
+#KUBERNETES_SERVICE_HOST=10.96.0.1
+#KUBERNETES_PORT=tcp://10.96.0.1:443
+#KUBERNETES_PORT_443_TCP_PORT=443
+#JobID=job-179431800324372022235-sunwenjie
+#PATH=/usr/local/python3.10.15/bin:/usr/local/python3.10.15/lib/python3.10/site-packages/torch/bin:/usr/local/Ascend/ascend-toolkit/latest/bin:/usr/local/Ascend/ascend-toolkit/latest/compiler/ccec_compiler/bin:/usr/local/Ascend/ascend-toolkit/latest/tools/ccec_compiler/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#ASCEND_HOME_PATH=/usr/local/Ascend/ascend-toolkit/latest
+#MKL_NUM_THREADS=16
+#DEBIAN_FRONTEND=noninteractive
+#OLDPWD=/workspace
+#_=/usr/bin/env
+################### info ###################
+data now: 2026-11-10 21:40:10
+run on node: szaic-mlops-npu-0008
+###########################################
+
+RPMEM_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+PYTHON=/usr/bin/python (Python 3.10.15)
+RPMEM_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B (exists=yes)
+RPMEM_CTX_ENCODER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base (exists=yes)
+RPMEM_DATA_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem (exists=yes)
+DEVICE_KIND=npu ASCEND_VISIBLE_DEVICES=4 ASCEND_RT_VISIBLE_DEVICES=<unset>
+RPMEM_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+PYTHON=/usr/bin/python (Python 3.10.15)
+RPMEM_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B (exists=yes)
+RPMEM_CTX_ENCODER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base (exists=yes)
+RPMEM_DATA_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem (exists=yes)
+DEVICE_KIND=npu ASCEND_VISIBLE_DEVICES=4 ASCEND_RT_VISIBLE_DEVICES=<unset>
+[rpmem deps] using /usr/bin/python
+  /tmp/pip-build-env-uti1axlc/overlay/lib/python3.10/site-packages/setuptools/command/editable_wheel.py:354: BuildBackendWarning: Editable installation.
+  !!
+  
+          ********************************************************************************
+          Please be careful with folders in your working directory with the same
+          name as your package as they may take precedence during imports.
+          ********************************************************************************
+  
+  !!
+    with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+torch 2.6.0+cpu
+transformers 4.57.6
+accelerate 1.4.0
+rpmem 0.1.0
+device npu count 1
+[rpmem deps] ok
+NAN_REPRO 1NPU CONFIG=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_nan_short.yaml DATA=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_nan_repro/train_500.jsonl TEACHER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_500 OUT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short
+visible ASCEND_VISIBLE_DEVICES=4 ASCEND_RT_VISIBLE_DEVICES=<unset>
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+2026-11-10 21:41:38,356 [INFO] Training hypernetwork, output: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short
+2026-11-10 21:41:38,356 [INFO] Args: {'config': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_nan_short.yaml', 'base_model_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B', 'ctx_encoder_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base', 'base_model_device_map': None, 'model_parallel_data_parallel': False, 'from_checkpoint': None, 'resume_from_checkpoint': None, 'perceiver_init_checkpoint': None, 'trainable_scope': 'perceiver_and_head', 'use_flash_attn': False, 'base_model_gradient_checkpointing': False, 'n_layers': 36, 'd_latent': 512, 'lora_r': 8, 'target_modules': ['down_proj'], 'per_layer_processing': True, 'per_rank_gen': True, 'num_pre_head_layers': 4, 'n_latent_queries': 8, 'num_blocks': 9, 'train_data': ['/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_nan_repro/train_500.jsonl'], 'val_data': None, 'max_ctx_len': 4096, 'max_seq_len': 640, 'per_device_train_batch_size': 1, 'per_device_eval_batch_size': 1, 'use_packing': False, 'teacher_logprobs_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_500', 'val_teacher_logprobs_dir': None, 'objective': 'offline_fkl', 'opcd_loss_mode': 'student_topk_reverse_kl', 'opcd_top_k': 32, 'opcd_kl_chunk_size': 16, 'opcd_rollout_max_new_tokens': 128, 'opcd_max_teacher_seq_len': 4864, 'opcd_queries_per_session': 8, 'opcd_context_lift_every': 50, 'opcd_context_lift_eval_batches': 32, 'quality_eval_sessions': 0, 'quality_eval_queries_per_session': 8, 'quality_eval_max_new_tokens': 128, 'lr': 4e-05, 'weight_decay': 0.01, 'warmup_steps': 5, 'max_steps': 40, 'max_epochs': None, 'gradient_accumulation_steps': 2, 'max_grad_norm': 1.0, 'l1_reg_coef': 0.01, 'use_per_ctx_average_loss': True, 'lora_alpha': 32.0, 'lora_dropout': 0.0, 'output_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short', 'tensorboard_dir': None, 'save_steps': 20, 'eval_steps': 20, 'save_training_state': True, 'save_epoch_boundaries': True, 'save_total_limit': 1, 'logging_steps': 1, 'dataloader_num_workers': 2, 'seed': 42, 'preflight_stop_after_step': None, 'selected_endpoint_step': None}
+`torch_dtype` is deprecated! Use `dtype` instead!
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:00,  7.09it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:00,  6.27it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  6.26it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:00<00:00,  6.86it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:00<00:00,  7.90it/s]
+2026-11-10 21:41:56,431 [INFO] Trainable scope: perceiver_and_head; params: 657,345,088
+2026-11-10 21:41:57,209 [INFO] Indexed 500 training samples without materializing the rows
+2026-11-10 21:41:57,290 [INFO] Distillation mode: teacher logprobs from /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_500
+2026-11-10 21:41:57,291 [INFO] Phase 1 objective: offline_fkl
+2026-11-10 21:41:58,935 [INFO] TensorBoard logging to: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short/tb_logs
+2026-11-10 21:41:58,944 [INFO] Starting training: 40 optimizer steps, grad_accum=2
+2026-11-10 21:42:02,269 [INFO] Step 1/40 | loss=2.4218 | lr=8.00e-06 | speed=0.3 steps/s
+2026-11-10 21:42:03,534 [INFO] Step 2/40 | loss=2.4190 | lr=1.60e-05 | speed=0.4 steps/s
+2026-11-10 21:42:04,586 [INFO] Step 3/40 | loss=2.8128 | lr=2.40e-05 | speed=0.5 steps/s
+2026-11-10 21:42:05,644 [INFO] Step 4/40 | loss=2.8541 | lr=3.20e-05 | speed=0.6 steps/s
+2026-11-10 21:42:06,757 [INFO] Step 5/40 | loss=2.5217 | lr=4.00e-05 | speed=0.6 steps/s
+2026-11-10 21:42:07,832 [INFO] Step 6/40 | loss=2.0967 | lr=3.99e-05 | speed=0.7 steps/s
+2026-11-10 21:42:08,929 [INFO] Step 7/40 | loss=2.0589 | lr=3.97e-05 | speed=0.7 steps/s
+2026-11-10 21:42:10,138 [INFO] Step 8/40 | loss=3.0316 | lr=3.93e-05 | speed=0.7 steps/s
+2026-11-10 21:42:11,191 [INFO] Step 9/40 | loss=3.7653 | lr=3.87e-05 | speed=0.7 steps/s
+2026-11-10 21:42:12,337 [INFO] Step 10/40 | loss=2.7870 | lr=3.80e-05 | speed=0.7 steps/s
+2026-11-10 21:42:13,591 [INFO] Step 11/40 | loss=2.4938 | lr=3.72e-05 | speed=0.8 steps/s
+2026-11-10 21:42:14,869 [INFO] Step 12/40 | loss=1.8057 | lr=3.62e-05 | speed=0.8 steps/s
+2026-11-10 21:42:15,951 [INFO] Step 13/40 | loss=2.7785 | lr=3.51e-05 | speed=0.8 steps/s
+2026-11-10 21:42:17,014 [INFO] Step 14/40 | loss=2.0443 | lr=3.38e-05 | speed=0.8 steps/s
+2026-11-10 21:42:18,103 [INFO] Step 15/40 | loss=2.5737 | lr=3.25e-05 | speed=0.8 steps/s
+2026-11-10 21:42:19,170 [INFO] Step 16/40 | loss=3.3163 | lr=3.10e-05 | speed=0.8 steps/s
+2026-11-10 21:42:20,291 [INFO] Step 17/40 | loss=1.4519 | lr=2.95e-05 | speed=0.8 steps/s
+2026-11-10 21:42:21,483 [INFO] Step 18/40 | loss=1.1297 | lr=2.79e-05 | speed=0.8 steps/s
+2026-11-10 21:42:22,584 [INFO] Step 19/40 | loss=1.1783 | lr=2.62e-05 | speed=0.8 steps/s
+2026-11-10 21:42:23,813 [INFO] Step 20/40 | loss=1.8829 | lr=2.45e-05 | speed=0.8 steps/s
+2026-11-10 21:42:38,312 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short/checkpoint-20
+2026-11-10 21:42:39,387 [INFO] Step 21/40 | loss=1.5967 | lr=2.27e-05 | speed=0.5 steps/s
+2026-11-10 21:42:40,469 [INFO] Step 22/40 | loss=2.9921 | lr=2.09e-05 | speed=0.5 steps/s
+2026-11-10 21:42:41,616 [INFO] Step 23/40 | loss=1.3492 | lr=1.91e-05 | speed=0.5 steps/s
+2026-11-10 21:42:42,663 [INFO] Step 24/40 | loss=1.4659 | lr=1.73e-05 | speed=0.5 steps/s
+2026-11-10 21:42:43,724 [INFO] Step 25/40 | loss=1.2071 | lr=1.55e-05 | speed=0.6 steps/s
+2026-11-10 21:42:45,132 [INFO] Step 26/40 | loss=1.5041 | lr=1.38e-05 | speed=0.6 steps/s
+2026-11-10 21:42:46,223 [INFO] Step 27/40 | loss=1.1631 | lr=1.21e-05 | speed=0.6 steps/s
+2026-11-10 21:42:47,287 [INFO] Step 28/40 | loss=1.1884 | lr=1.05e-05 | speed=0.6 steps/s
+2026-11-10 21:42:48,405 [INFO] Step 29/40 | loss=0.7648 | lr=8.98e-06 | speed=0.6 steps/s
+2026-11-10 21:42:49,472 [INFO] Step 30/40 | loss=1.2473 | lr=7.53e-06 | speed=0.6 steps/s
+2026-11-10 21:42:50,539 [INFO] Step 31/40 | loss=0.9909 | lr=6.18e-06 | speed=0.6 steps/s
+2026-11-10 21:42:51,666 [INFO] Step 32/40 | loss=1.1148 | lr=4.94e-06 | speed=0.6 steps/s
+2026-11-10 21:42:52,806 [INFO] Step 33/40 | loss=1.3897 | lr=3.82e-06 | speed=0.6 steps/s
+2026-11-10 21:42:53,890 [INFO] Step 34/40 | loss=1.7314 | lr=2.83e-06 | speed=0.6 steps/s
+2026-11-10 21:42:54,983 [INFO] Step 35/40 | loss=1.9625 | lr=1.98e-06 | speed=0.6 steps/s
+2026-11-10 21:42:56,034 [INFO] Step 36/40 | loss=1.0935 | lr=1.28e-06 | speed=0.6 steps/s
+2026-11-10 21:42:57,087 [INFO] Step 37/40 | loss=1.2220 | lr=7.21e-07 | speed=0.6 steps/s
+2026-11-10 21:42:58,179 [INFO] Step 38/40 | loss=1.4666 | lr=3.21e-07 | speed=0.6 steps/s
+2026-11-10 21:42:59,296 [INFO] Step 39/40 | loss=1.3743 | lr=8.05e-08 | speed=0.6 steps/s
+2026-11-10 21:43:00,381 [INFO] Step 40/40 | loss=1.6047 | lr=0.00e+00 | speed=0.7 steps/s
+2026-11-10 21:43:13,463 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short/checkpoint-40
+2026-11-10 21:43:13,497 [INFO] Pruned old checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short/checkpoint-20
+2026-11-10 21:43:18,203 [INFO] Training complete. Final checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short/pytorch_model.bin
+2026-11-10 21:43:18,203 [INFO] Total time: 79.3s, avg_loss: 1.8963
+NAN_REPRO DONE -> /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_nan_repro_short

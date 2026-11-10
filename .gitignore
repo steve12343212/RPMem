@@ -30,3 +30,11 @@ third_party/
 logs/
 fusion_result.json
 *.JOB.log
+
+# Keep Ascend NaN investigation artifacts trackable.
+!experiments/
+!experiments/**
+!experiments/**/*.log
+!experiments/**/*.tar.gz
+!experiments/**/*.png
+!experiments/**/*.csv

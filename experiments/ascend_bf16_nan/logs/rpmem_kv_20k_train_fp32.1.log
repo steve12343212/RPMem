@@ -1,0 +1,459 @@
+################### env ###################
+#KUBERNETES_SERVICE_PORT_HTTPS=443
+#KUBERNETES_SERVICE_PORT=443
+#PYTHONUNBUFFERED=1
+#HOSTNAME=job-179396150502860141013-sunwenjie-master-0
+#NUMEXPR_NUM_THREADS=64
+#MASTER_PORT=23456
+#PWD=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+#VC_MASTER_NUM=1
+#GIT_SSL_NO_VERIFY=1
+#ASCEND_VISIBLE_DEVICES=2,3,4,5,6,7,0,1
+#VC_WORKER_HOSTS=
+#TZ=Asia/Shanghai
+#ASCEND_RUNTIME_OPTIONS=
+#OPENBLAS_NUM_THREADS=64
+#WORLD_SIZE=1
+#HOME=/aistor/sjtu/hpc_stor01/home/sunwenjie
+#KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+#JOB=1
+#LOG_FILE=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/logs/vc/rpmem_kv_20k_train_fp32.JOB.log
+#VC_MASTER_HOSTS=job-179396150502860141013-sunwenjie-master-0.job-179396150502860141013-sunwenjie
+#GPU_NUM=8
+#VECLIB_NUM_THREADS=64
+#LORA_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen2.5-7B-Instruct
+#TOOLCHAIN_HOME=/usr/local/Ascend/ascend-toolkit/latest/toolkit
+#ASCEND_TOOLKIT_HOME=/usr/local/Ascend/ascend-toolkit/latest
+#VC_WORKER_NUM=0
+#MASTER_ADDR=job-179396150502860141013-sunwenjie-master-0.job-179396150502860141013-sunwenjie
+#PYTHONPATH=/usr/local/Ascend/ascend-toolkit/latest/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe:/usr/local/python3.10.15/lib/python3.10/site-packages:
+#USER=sunwenjie
+#SHLVL=0
+#KUBERNETES_PORT_443_TCP_PROTO=tcp
+#DEVICE_KIND=npu
+#KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+#ASCEND_OPP_PATH=/usr/local/Ascend/ascend-toolkit/latest/opp
+#LD_LIBRARY_PATH=/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64/plugin:/usr/local/Ascend/ascend-toolkit/latest/lib64:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/opskernel:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/nnengine:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/$(arch):/usr/local/python3.10.15/lib:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/add-ons:/usr/local/Ascend/driver/tools/hccn_tool:
+#ASCEND_AICPU_PATH=/usr/local/Ascend/ascend-toolkit/latest
+#RANK=0
+#GPU_PER_TASK=8
+#OMP_NUM_THREADS=64
+#KUBERNETES_SERVICE_HOST=10.96.0.1
+#KUBERNETES_PORT=tcp://10.96.0.1:443
+#KUBERNETES_PORT_443_TCP_PORT=443
+#JobID=job-179396150502860141013-sunwenjie
+#PATH=/usr/local/python3.10.15/bin:/usr/local/python3.10.15/lib/python3.10/site-packages/torch/bin:/usr/local/Ascend/ascend-toolkit/latest/bin:/usr/local/Ascend/ascend-toolkit/latest/compiler/ccec_compiler/bin:/usr/local/Ascend/ascend-toolkit/latest/tools/ccec_compiler/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#ASCEND_HOME_PATH=/usr/local/Ascend/ascend-toolkit/latest
+#MKL_NUM_THREADS=64
+#DEBIAN_FRONTEND=noninteractive
+#OLDPWD=/workspace
+#_=/usr/bin/env
+################### info ###################
+data now: 2026-11-07 19:46:27
+run on node: szaic-mlops-npu-0008
+###########################################
+
+[pipeline] compiler train 20k -> /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k
+RPMEM_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+PYTHON=/usr/bin/python (Python 3.10.15)
+RPMEM_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B (exists=yes)
+RPMEM_CTX_ENCODER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base (exists=yes)
+RPMEM_DATA_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem (exists=yes)
+DEVICE_KIND=npu ASCEND_VISIBLE_DEVICES=2,3,4,5,6,7,0,1 ASCEND_RT_VISIBLE_DEVICES=<unset>
+RPMEM_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem
+PYTHON=/usr/bin/python (Python 3.10.15)
+RPMEM_BASE_MODEL=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B (exists=yes)
+RPMEM_CTX_ENCODER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base (exists=yes)
+RPMEM_DATA_ROOT=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem (exists=yes)
+DEVICE_KIND=npu ASCEND_VISIBLE_DEVICES=2,3,4,5,6,7,0,1 ASCEND_RT_VISIBLE_DEVICES=<unset>
+[rpmem deps] using /usr/bin/python
+  /tmp/pip-build-env-s0k63dz8/overlay/lib/python3.10/site-packages/setuptools/command/editable_wheel.py:354: BuildBackendWarning: Editable installation.
+  !!
+  
+          ********************************************************************************
+          Please be careful with folders in your working directory with the same
+          name as your package as they may take precedence during imports.
+          ********************************************************************************
+  
+  !!
+    with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+torch 2.6.0+cpu
+transformers 4.57.6
+accelerate 1.4.0
+rpmem 0.1.0
+device npu count 8
+[rpmem deps] ok
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+NPU_COUNT=8 CONFIG=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_20k.yaml TRAIN_DATA=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_20k/train.jsonl TEACHER=/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/_path_manager.py:66: UserWarning: Permission mismatch: The owner of /usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/lib/libop_plugin_atb.so does not match.
+  warnings.warn(f"Permission mismatch: The owner of {path} does not match.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/latest owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/utils/collect_env.py:58: UserWarning: Warning: The /usr/local/Ascend/ascend-toolkit/8.2.RC1/aarch64-linux/ascend_toolkit_install.info owner does not match the current owner.
+  warnings.warn(f"Warning: The {path} owner does not match the current owner.")
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+2026-11-07 19:48:30,520 [INFO] Training hypernetwork, output: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k
+2026-11-07 19:48:30,523 [INFO] Args: {'config': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/configs/compiler/qwen3_8b_npu_20k.yaml', 'base_model_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/Qwen3-8B', 'ctx_encoder_path': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/models/ModernBERT-base', 'base_model_device_map': None, 'model_parallel_data_parallel': False, 'from_checkpoint': None, 'resume_from_checkpoint': None, 'perceiver_init_checkpoint': None, 'trainable_scope': 'perceiver_and_head', 'use_flash_attn': False, 'base_model_gradient_checkpointing': False, 'n_layers': 36, 'd_latent': 512, 'lora_r': 8, 'target_modules': ['down_proj'], 'per_layer_processing': True, 'per_rank_gen': True, 'num_pre_head_layers': 4, 'n_latent_queries': 8, 'num_blocks': 9, 'train_data': ['/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/data/rpmem/compiler_20k/train.jsonl'], 'val_data': None, 'max_ctx_len': 4096, 'max_seq_len': 640, 'per_device_train_batch_size': 1, 'per_device_eval_batch_size': 1, 'use_packing': False, 'teacher_logprobs_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k', 'val_teacher_logprobs_dir': None, 'objective': 'offline_fkl', 'opcd_loss_mode': 'student_topk_reverse_kl', 'opcd_top_k': 32, 'opcd_kl_chunk_size': 16, 'opcd_rollout_max_new_tokens': 128, 'opcd_max_teacher_seq_len': 4864, 'opcd_queries_per_session': 8, 'opcd_context_lift_every': 50, 'opcd_context_lift_eval_batches': 32, 'quality_eval_sessions': 0, 'quality_eval_queries_per_session': 8, 'quality_eval_max_new_tokens': 128, 'lr': 4e-05, 'weight_decay': 0.01, 'warmup_steps': 100, 'max_steps': 1565, 'max_epochs': None, 'gradient_accumulation_steps': 8, 'max_grad_norm': 1.0, 'l1_reg_coef': 0.01, 'use_per_ctx_average_loss': True, 'lora_alpha': 32.0, 'lora_dropout': 0.0, 'output_dir': '/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k', 'tensorboard_dir': None, 'save_steps': 500, 'eval_steps': 500, 'save_training_state': True, 'save_epoch_boundaries': True, 'save_total_limit': 2, 'logging_steps': 25, 'dataloader_num_workers': 8, 'seed': 42, 'preflight_stop_after_step': None, 'selected_endpoint_step': None}
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/usr/local/python3.10.15/lib/python3.10/site-packages/torchvision/image.so: undefined symbol: _ZN3c1017RegisterOperatorsD1Ev'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  3.11it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:00,  4.45it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  2.72it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  3.35it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  3.00it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:00,  3.84it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  3.12it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:00,  3.19it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:01,  2.90it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  4.14it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:01,  2.96it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  3.26it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:00,  3.18it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:01,  2.39it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:00<00:00,  4.48it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  4.95it/s]
+Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  3.15it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  3.82it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  3.83it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:00,  2.81it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  4.12it/s]
+Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:00,  2.72it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  4.26it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:00,  2.47it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  4.49it/s]
+Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:01,  3.31it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:00,  3.19it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  3.23it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  3.23it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.94it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.43it/s]
+Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.64it/s]
+Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  2.98it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.29it/s]
+Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  3.26it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:01,  2.90it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  3.82it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  4.12it/s]
+Loading checkpoint shards:  60%|██████    | 3/5 [00:00<00:00,  3.37it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  3.47it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.95it/s]
+2026-11-07 19:48:57,633 [INFO] Trainable scope: perceiver_and_head; params: 657,345,088
+2026-11-07 19:48:58,563 [INFO] Indexed 20000 training samples without materializing the rows
+2026-11-07 19:48:58,858 [INFO] Distillation mode: teacher logprobs from /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/teacher_kvcache_20k
+2026-11-07 19:48:58,858 [INFO] Phase 1 objective: offline_fkl
+2026-11-07 19:49:07,536 [INFO] TensorBoard logging to: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k/tb_logs
+2026-11-07 19:49:07,546 [INFO] Starting training: 1565 optimizer steps, grad_accum=8
+2026-11-07 19:51:20,466 [INFO] Step 25/1565 | loss=nan | lr=3.95e-05 | speed=0.2 steps/s
+2026-11-07 19:53:36,752 [INFO] Step 50/1565 | loss=nan | lr=3.60e-05 | speed=0.2 steps/s
+2026-11-07 19:55:53,732 [INFO] Step 75/1565 | loss=nan | lr=2.96e-05 | speed=0.2 steps/s
+2026-11-07 19:58:12,734 [INFO] Step 100/1565 | loss=nan | lr=2.14e-05 | speed=0.2 steps/s
+2026-11-07 20:00:32,885 [INFO] Step 125/1565 | loss=nan | lr=1.30e-05 | speed=0.2 steps/s
+2026-11-07 20:02:50,670 [INFO] Step 150/1565 | loss=nan | lr=5.82e-06 | speed=0.2 steps/s
+2026-11-07 20:05:09,477 [INFO] Step 175/1565 | loss=nan | lr=1.24e-06 | speed=0.2 steps/s
+2026-11-07 20:07:24,617 [INFO] Step 200/1565 | loss=nan | lr=5.63e-08 | speed=0.2 steps/s
+2026-11-07 20:09:41,866 [INFO] Step 225/1565 | loss=nan | lr=2.49e-06 | speed=0.2 steps/s
+2026-11-07 20:11:59,725 [INFO] Step 250/1565 | loss=nan | lr=8.09e-06 | speed=0.2 steps/s
+2026-11-07 20:14:15,117 [INFO] Step 275/1565 | loss=nan | lr=1.58e-05 | speed=0.2 steps/s
+2026-11-07 20:16:31,700 [INFO] Step 300/1565 | loss=nan | lr=2.44e-05 | speed=0.2 steps/s
+('Warning: torch.save with "_use_new_zipfile_serialization = False" is not recommended for npu tensor, which may bring unexpected errors and hopefully set "_use_new_zipfile_serialization = True"', 'if it is necessary to use this, please convert the npu tensor to cpu tensor for saving')
+/usr/local/python3.10.15/lib/python3.10/site-packages/torch_npu/distributed/distributed_c10d.py:108: UserWarning: HCCL doesn't support gather at the moment. Implemented with allgather instead.
+  warnings.warn("HCCL doesn't support gather at the moment. Implemented with allgather instead.")
+2026-11-07 20:17:56,337 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k/checkpoint-313
+2026-11-07 20:19:04,334 [INFO] Step 325/1565 | loss=nan | lr=3.21e-05 | speed=0.2 steps/s
+2026-11-07 20:21:22,695 [INFO] Step 350/1565 | loss=nan | lr=3.76e-05 | speed=0.2 steps/s
+2026-11-07 20:23:39,377 [INFO] Step 375/1565 | loss=nan | lr=4.00e-05 | speed=0.2 steps/s
+2026-11-07 20:25:57,884 [INFO] Step 400/1565 | loss=nan | lr=3.87e-05 | speed=0.2 steps/s
+2026-11-07 20:28:13,838 [INFO] Step 425/1565 | loss=nan | lr=3.40e-05 | speed=0.2 steps/s
+2026-11-07 20:30:29,421 [INFO] Step 450/1565 | loss=nan | lr=2.68e-05 | speed=0.2 steps/s
+2026-11-07 20:32:47,460 [INFO] Step 475/1565 | loss=nan | lr=1.84e-05 | speed=0.2 steps/s
+2026-11-07 20:35:04,880 [INFO] Step 500/1565 | loss=nan | lr=1.02e-05 | speed=0.2 steps/s
+2026-11-07 20:35:21,001 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k/checkpoint-500
+2026-11-07 20:37:38,646 [INFO] Step 525/1565 | loss=nan | lr=3.87e-06 | speed=0.2 steps/s
+2026-11-07 20:39:54,224 [INFO] Step 550/1565 | loss=nan | lr=4.14e-07 | speed=0.2 steps/s
+2026-11-07 20:42:10,007 [INFO] Step 575/1565 | loss=nan | lr=5.05e-07 | speed=0.2 steps/s
+2026-11-07 20:44:27,050 [INFO] Step 600/1565 | loss=nan | lr=4.13e-06 | speed=0.2 steps/s
+2026-11-07 20:46:42,410 [INFO] Step 625/1565 | loss=nan | lr=1.06e-05 | speed=0.2 steps/s
+2026-11-07 20:47:04,740 [INFO] Saved checkpoint: /aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/outputs/compiler_qwen3_8b_npu_20k/checkpoint-626
+2026-11-07 20:49:17,698 [INFO] Step 650/1565 | loss=nan | lr=1.88e-05 | speed=0.2 steps/s
+2026-11-07 20:51:31,804 [INFO] Step 675/1565 | loss=nan | lr=2.72e-05 | speed=0.2 steps/s
+2026-11-07 20:53:48,365 [INFO] Step 700/1565 | loss=nan | lr=3.43e-05 | speed=0.2 steps/s
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/usr/local/python3.10.15/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+[rank2]:     return _run_code(code, main_globals, None,
+[rank2]:   File "/usr/local/python3.10.15/lib/python3.10/runpy.py", line 86, in _run_code
+[rank2]:     exec(code, run_globals)
+[rank2]:   File "/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/rpmem/training/train_hypernet.py", line 1833, in <module>
+[rank2]:     main()
+[rank2]:   File "/aistor/sjtu/hpc_stor01/home/sunwenjie/workshop/RPMem/rpmem/training/train_hypernet.py", line 1608, in main
+[rank2]:     accelerator.backward(loss)
+[rank2]:   File "/aistor/sjtu/hpc_stor01/home/sunwenjie/.local/lib/python3.10/site-packages/accelerate/accelerator.py", line 2329, in backward
+[rank2]:     loss.backward(**kwargs)
+[rank2]:   File "/usr/local/python3.10.15/lib/python3.10/site-packages/torch/_tensor.py", line 626, in backward
+[rank2]:     torch.autograd.backward(
+[rank2]:   File "/usr/local/python3.10.15/lib/python3.10/site-packages/torch/autograd/__init__.py", line 347, in backward
+[rank2]:     _engine_run_backward(
+[rank2]:   File "/usr/local/python3.10.15/lib/python3.10/site-packages/torch/autograd/graph.py", line 823, in _engine_run_backward
+[rank2]:     return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[rank2]: RuntimeError: NPU out of memory. Tried to allocate 1.38 GiB (NPU 2; 60.96 GiB total capacity; 52.39 GiB already allocated; 52.39 GiB current active; 1.32 GiB free; 57.11 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.
+[ERROR] 2026-11-07-20:55:36 (PID:401, Device:2, RankID:-1) ERR99999 UNKNOWN applicaiton exception
+W1107 20:55:41.702000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 399 closing signal SIGTERM
+W1107 20:55:41.704000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 400 closing signal SIGTERM
+W1107 20:55:41.704000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 402 closing signal SIGTERM
+W1107 20:55:41.706000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 403 closing signal SIGTERM
+W1107 20:55:41.725000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 404 closing signal SIGTERM
+W1107 20:55:41.789000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 405 closing signal SIGTERM
+W1107 20:55:41.810000 329 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 406 closing signal SIGTERM
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+Exception in thread Thread-1:
+Exception in thread Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+Thread-1:
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+    key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    Exception in thread key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+Thread-1:
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+    self.run()
+  File "/usr/local/Ascend/ascend-toolkit/latest/python/site-packages/tbe/common/repository_manager/utils/multiprocess_util.py", line 91, in run
+    key, func, args, kwargs = self.task_q.get(timeout=TIMEOUT)
+  File "<string>", line 2, in get
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/managers.py", line 817, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 411, in _send_bytes
+    self._send(header + buf)
+  File "/usr/local/python3.10.15/lib/python3.10/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+BrokenPipeError: [Errno 32] Broken pipe
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/local/python3.10.15/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 30 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+E1107 20:55:44.189000 329 torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 2 (pid: 401) of binary: /usr/bin/python
+Traceback (most recent call last):
+  File "/usr/local/python3.10.15/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/local/python3.10.15/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/aistor/sjtu/hpc_stor01/home/sunwenjie/.local/lib/python3.10/site-packages/accelerate/commands/launch.py", line 1209, in <module>
+    main()
+  File "/aistor/sjtu/hpc_stor01/home/sunwenjie/.local/lib/python3.10/site-packages/accelerate/commands/launch.py", line 1205, in main
+    launch_command(args)
+  File "/aistor/sjtu/hpc_stor01/home/sunwenjie/.local/lib/python3.10/site-packages/accelerate/commands/launch.py", line 1190, in launch_command
+    multi_gpu_launcher(args)
+  File "/aistor/sjtu/hpc_stor01/home/sunwenjie/.local/lib/python3.10/site-packages/accelerate/commands/launch.py", line 808, in multi_gpu_launcher
+    distrib_run.run(args)
+  File "/usr/local/python3.10.15/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/usr/local/python3.10.15/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/usr/local/python3.10.15/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+rpmem.training.train_hypernet FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-11-07_20:55:41
+  host      : job-179396150502860141013-sunwenjie-master-0.job-179396150502860141013-sunwenjie.ns-sunwenjie.svc.cluster.local
+  rank      : 2 (local_rank: 2)
+  exitcode  : 1 (pid: 401)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[ERROR] 2026-11-07-20:55:44 (PID:329, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception
