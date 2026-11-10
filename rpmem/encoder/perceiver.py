@@ -116,7 +116,24 @@ class PerceiverAttention(nn.Module):
         k = repeat_kv(k, self.num_key_value_groups)
         v = repeat_kv(v, self.num_key_value_groups)
 
-        attn_out = F.scaled_dot_product_attention(q, k, v, dropout_p=self.attention_dropout if self.training else 0.0)
+        probe = getattr(self, "_branch_probe", None)
+        block_id = getattr(self, "_branch_block_id", None)
+
+        attn_out = F.scaled_dot_product_attention(
+            q,
+            k,
+            v,
+            dropout_p=self.attention_dropout if self.training else 0.0,
+        )
+        if probe is not None and block_id is not None:
+            # Capture q/k/v and the raw SDPA output (pre transpose/o_proj) for Exp-2.
+            probe.register_sdpa_io(
+                int(block_id),
+                query=q,
+                key=k,
+                value=v,
+                attn_out=attn_out,
+            )
         attn_out = attn_out.transpose(1, 2).contiguous().reshape(bsz, q_len, -1)
         return self.o_proj(attn_out)
 
@@ -183,12 +200,23 @@ class PerceiverLayer(nn.Module):
         latents = self.input_latents_layernorm(latents)
         context = self.input_context_layernorm(context)
 
-        attn_out = self.self_attn(
-            latents=latents,
-            is_cross_attn=self.is_cross_attn,
-            context=context,
-            **kwargs,
-        )
+        probe = getattr(self, "_branch_probe", None)
+        block_id = getattr(self, "_branch_block_id", None)
+        if probe is not None and block_id is not None and self.is_cross_attn:
+            probe.register_context_rms_out(int(block_id), context)
+            self.self_attn._branch_probe = probe
+            self.self_attn._branch_block_id = int(block_id)
+        try:
+            attn_out = self.self_attn(
+                latents=latents,
+                is_cross_attn=self.is_cross_attn,
+                context=context,
+                **kwargs,
+            )
+        finally:
+            if hasattr(self.self_attn, "_branch_probe"):
+                self.self_attn._branch_probe = None
+                self.self_attn._branch_block_id = None
         latents = self.post_attention_layernorm(attn_out)
         latents = residual + latents
 
@@ -300,13 +328,30 @@ class PerceiverResampler(nn.Module):
             x_attn_kwargs = {}
             self_attn_kwargs = {}
 
+        probe = getattr(self, "encoder_branch_probe", None)
+        if probe is not None:
+            probe.register_shared_context(context)
+
+        cross_block_id = 0
         for layer in self.layers:
             kwargs = x_attn_kwargs if layer.is_cross_attn else self_attn_kwargs
-            compressed_context = layer(
-                latents=compressed_context,
-                context=context,
-                **kwargs,
-            )
+            layer_context = context
+            if probe is not None and layer.is_cross_attn:
+                layer_context = probe.wrap_context(context, cross_block_id)
+                layer._branch_probe = probe
+                layer._branch_block_id = cross_block_id
+            try:
+                compressed_context = layer(
+                    latents=compressed_context,
+                    context=layer_context,
+                    **kwargs,
+                )
+            finally:
+                if hasattr(layer, "_branch_probe"):
+                    layer._branch_probe = None
+                    layer._branch_block_id = None
+            if probe is not None and layer.is_cross_attn:
+                cross_block_id += 1
 
         return self.layernorm(compressed_context)
 

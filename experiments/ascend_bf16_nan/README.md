@@ -81,3 +81,15 @@ Artifacts: `nan_probe_perceiver_isolate/`, `nan_probe_perceiver_isolate_zgrad/`.
 
 Implication: fault is **inside encoder backward** (`latents → projected`), not FKL/head, and **not** from accumulating `12027`. `ctx_features` for `16890` already has absmax `~3.9e4`. Isolated replay is **nondeterministic** at this scale (1e-8 vs 1e29); next step is capture forward `projected`/`latents`, force deterministic SDPA, and/or FP32 encoder backward on the saved activations.
 
+## Encoder branch probe (`nan_probe_branch_probe`)
+
+Per-block independent `projected` views + RMSNorm/SDPA K/V hooks on the isolate dump (3 repeats).
+
+- 2/3 repeats magnitude-ok; 1/3 catastrophic.
+- First bad cross-attn block: **6**. First catastrophic signal in backward order: **`sdpa_v`** (~1e30) while **`sdpa_k`** stays ~1e-8.
+- Saved `first_bad_block_repeat1.pt` for operator-level BF16/FP32对照.
+
+## SDPA backend对照 (`nan_probe_sdpa_compare`)
+
+On a failing block dump, isolated `explicit_fp32` / `explicit_bf16` are stable; **Ascend SDPA bf16 backward is intermittently catastrophic on the same `(q,k,v,dout)`** (observed `dv~1e30` while replay usually `~1e-7`). Recommendation: **replace Perceiver SDPA with explicit attention** (not whole-encoder FP32).
+

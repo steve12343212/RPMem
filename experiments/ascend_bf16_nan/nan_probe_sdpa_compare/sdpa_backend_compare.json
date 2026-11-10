@@ -1,0 +1,1072 @@
+{
+  "backends": [
+    {
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "explicit": false,
+      "name": "sdpa_bf16",
+      "reports": {
+        "k": {
+          "absmax": 3.67872416973114e-08,
+          "absmax_coord": [
+            27,
+            6,
+            108,
+            27
+          ],
+          "absmax_flat_index": 4326171,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 3.67872416973114e-08,
+          "mean": -7.429105751801182e-16,
+          "min": -2.9685907065868378e-08,
+          "name": "sdpa_bf16.k",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        },
+        "out": {
+          "absmax": 1.578125,
+          "absmax_coord": [
+            35,
+            1,
+            0,
+            38
+          ],
+          "absmax_flat_index": 143910,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 1.359375,
+          "mean": -0.013789322227239609,
+          "min": -1.578125,
+          "name": "sdpa_bf16.out",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "q": {
+          "absmax": 5.9138983488082886e-08,
+          "absmax_coord": [
+            27,
+            2,
+            6,
+            50
+          ],
+          "absmax_flat_index": 112050,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 5.075708031654358e-08,
+          "mean": -5.900320509955037e-11,
+          "min": -5.9138983488082886e-08,
+          "name": "sdpa_bf16.q",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "v": {
+          "absmax": 9.499490261077881e-08,
+          "absmax_coord": [
+            27,
+            3,
+            253,
+            34
+          ],
+          "absmax_flat_index": 4277090,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 9.499490261077881e-08,
+          "mean": -6.000470953448911e-12,
+          "min": -9.12696123123169e-08,
+          "name": "sdpa_bf16.v",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        }
+      }
+    },
+    {
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "explicit": true,
+      "name": "explicit_bf16",
+      "reports": {
+        "k": {
+          "absmax": 3.67872416973114e-08,
+          "absmax_coord": [
+            27,
+            6,
+            108,
+            27
+          ],
+          "absmax_flat_index": 4326171,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 3.67872416973114e-08,
+          "mean": -3.820965625064149e-16,
+          "min": -2.9685907065868378e-08,
+          "name": "explicit_bf16.k",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        },
+        "out": {
+          "absmax": 1.578125,
+          "absmax_coord": [
+            35,
+            1,
+            0,
+            38
+          ],
+          "absmax_flat_index": 143910,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 1.359375,
+          "mean": -0.013790303841233253,
+          "min": -1.578125,
+          "name": "explicit_bf16.out",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "q": {
+          "absmax": 5.8906152844429016e-08,
+          "absmax_coord": [
+            27,
+            2,
+            6,
+            50
+          ],
+          "absmax_flat_index": 112050,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 5.075708031654358e-08,
+          "mean": -5.908275257926476e-11,
+          "min": -5.8906152844429016e-08,
+          "name": "explicit_bf16.q",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "v": {
+          "absmax": 9.499490261077881e-08,
+          "absmax_coord": [
+            27,
+            3,
+            253,
+            34
+          ],
+          "absmax_flat_index": 4277090,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 9.499490261077881e-08,
+          "mean": -6.0014779604267154e-12,
+          "min": -9.12696123123169e-08,
+          "name": "explicit_bf16.v",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        }
+      }
+    },
+    {
+      "catastrophic": false,
+      "dtype": "torch.float32",
+      "explicit": true,
+      "name": "explicit_fp32",
+      "reports": {
+        "k": {
+          "absmax": 3.6855180240991103e-08,
+          "absmax_coord": [
+            27,
+            6,
+            108,
+            27
+          ],
+          "absmax_flat_index": 4326171,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 3.6855180240991103e-08,
+          "mean": -1.3213713977167085e-19,
+          "min": -2.9728299821840665e-08,
+          "name": "explicit_fp32.k",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        },
+        "out": {
+          "absmax": 1.5795261859893799,
+          "absmax_coord": [
+            35,
+            1,
+            0,
+            38
+          ],
+          "absmax_flat_index": 143910,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 1.3628820180892944,
+          "mean": -0.01379066426306963,
+          "min": -1.5795261859893799,
+          "name": "explicit_fp32.out",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "q": {
+          "absmax": 5.8830565308198857e-08,
+          "absmax_coord": [
+            27,
+            2,
+            6,
+            50
+          ],
+          "absmax_flat_index": 112050,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 5.088141463716056e-08,
+          "mean": -5.909338296472555e-11,
+          "min": -5.8830565308198857e-08,
+          "name": "explicit_fp32.q",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "v": {
+          "absmax": 9.491040486864222e-08,
+          "absmax_coord": [
+            27,
+            3,
+            253,
+            34
+          ],
+          "absmax_flat_index": 4277090,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 9.491040486864222e-08,
+          "mean": -6.001423316637222e-12,
+          "min": -9.123586863779565e-08,
+          "name": "explicit_fp32.v",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        }
+      }
+    }
+  ],
+  "block_id": 3,
+  "catastrophic_absmax_threshold": 1e+20,
+  "comparisons": {
+    "explicit_bf16": {
+      "catastrophic": false,
+      "reports": {
+        "k": {
+          "absmax": 3.67872416973114e-08,
+          "absmax_coord": [
+            27,
+            6,
+            108,
+            27
+          ],
+          "absmax_flat_index": 4326171,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 3.67872416973114e-08,
+          "mean": -3.820965625064149e-16,
+          "min": -2.9685907065868378e-08,
+          "name": "explicit_bf16.k",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        },
+        "out": {
+          "absmax": 1.578125,
+          "absmax_coord": [
+            35,
+            1,
+            0,
+            38
+          ],
+          "absmax_flat_index": 143910,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 1.359375,
+          "mean": -0.013790303841233253,
+          "min": -1.578125,
+          "name": "explicit_bf16.out",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "q": {
+          "absmax": 5.8906152844429016e-08,
+          "absmax_coord": [
+            27,
+            2,
+            6,
+            50
+          ],
+          "absmax_flat_index": 112050,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 5.075708031654358e-08,
+          "mean": -5.908275257926476e-11,
+          "min": -5.8906152844429016e-08,
+          "name": "explicit_bf16.q",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "v": {
+          "absmax": 9.499490261077881e-08,
+          "absmax_coord": [
+            27,
+            3,
+            253,
+            34
+          ],
+          "absmax_flat_index": 4277090,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 9.499490261077881e-08,
+          "mean": -6.0014779604267154e-12,
+          "min": -9.12696123123169e-08,
+          "name": "explicit_bf16.v",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        }
+      },
+      "vs_fp32": {
+        "k": {
+          "abs_max": 1.0895817581513256e-10,
+          "abs_mean": 7.297600566370799e-13,
+          "cand_absmax": 3.67872416973114e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 3.6855180240991103e-08,
+          "rel_max": 6.905160427093506,
+          "rel_mean": 0.006759772542864084
+        },
+        "out": {
+          "abs_max": 0.004237174987792969,
+          "abs_mean": 0.00048738630721345544,
+          "cand_absmax": 1.578125,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 1.5795261859893799,
+          "rel_max": 5.879993438720703,
+          "rel_mean": 0.0018985687056556344
+        },
+        "q": {
+          "abs_max": 1.4559731198460213e-10,
+          "abs_mean": 4.305577595842269e-12,
+          "cand_absmax": 5.8906152844429016e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 5.8830565308198857e-08,
+          "rel_max": 15.547781944274902,
+          "rel_mean": 0.010086226277053356
+        },
+        "v": {
+          "abs_max": 3.8751579722884344e-10,
+          "abs_mean": 3.399033441861543e-12,
+          "cand_absmax": 9.499490261077881e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 9.491040486864222e-08,
+          "rel_max": 6.147406101226807,
+          "rel_mean": 0.002322479384019971
+        }
+      },
+      "vs_observed": {
+        "k": {
+          "abs_max": 1.1641532182693481e-10,
+          "abs_mean": 6.817210641482663e-13,
+          "cand_absmax": 3.67872416973114e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 3.67872416973114e-08,
+          "rel_max": 10.897061347961426,
+          "rel_mean": 0.008796953596174717
+        },
+        "q": {
+          "abs_max": 1.280568540096283e-09,
+          "abs_mean": 2.272949189974227e-11,
+          "cand_absmax": 5.8906152844429016e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 5.9138983488082886e-08,
+          "rel_max": 145.2438201904297,
+          "rel_mean": 0.0729738175868988
+        },
+        "v": {
+          "abs_max": 1.9807040628566084e+30,
+          "abs_mean": 1.2389573495509292e+25,
+          "cand_absmax": 9.499490261077881e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 1.9807040628566084e+30,
+          "rel_max": 14.368420600891113,
+          "rel_mean": 0.002052277559414506
+        }
+      }
+    },
+    "explicit_fp32": {
+      "catastrophic": false,
+      "reports": {
+        "k": {
+          "absmax": 3.6855180240991103e-08,
+          "absmax_coord": [
+            27,
+            6,
+            108,
+            27
+          ],
+          "absmax_flat_index": 4326171,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 3.6855180240991103e-08,
+          "mean": -1.3213713977167085e-19,
+          "min": -2.9728299821840665e-08,
+          "name": "explicit_fp32.k",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        },
+        "out": {
+          "absmax": 1.5795261859893799,
+          "absmax_coord": [
+            35,
+            1,
+            0,
+            38
+          ],
+          "absmax_flat_index": 143910,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 1.3628820180892944,
+          "mean": -0.01379066426306963,
+          "min": -1.5795261859893799,
+          "name": "explicit_fp32.out",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "q": {
+          "absmax": 5.8830565308198857e-08,
+          "absmax_coord": [
+            27,
+            2,
+            6,
+            50
+          ],
+          "absmax_flat_index": 112050,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 5.088141463716056e-08,
+          "mean": -5.909338296472555e-11,
+          "min": -5.8830565308198857e-08,
+          "name": "explicit_fp32.q",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "v": {
+          "absmax": 9.491040486864222e-08,
+          "absmax_coord": [
+            27,
+            3,
+            253,
+            34
+          ],
+          "absmax_flat_index": 4277090,
+          "catastrophic": false,
+          "dtype": "torch.float32",
+          "finite": true,
+          "max": 9.491040486864222e-08,
+          "mean": -6.001423316637222e-12,
+          "min": -9.123586863779565e-08,
+          "name": "explicit_fp32.v",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        }
+      },
+      "vs_fp32": {
+        "k": {
+          "abs_max": 0.0,
+          "abs_mean": 0.0,
+          "cand_absmax": 3.6855180240991103e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 3.6855180240991103e-08,
+          "rel_max": 0.0,
+          "rel_mean": 0.0
+        },
+        "out": {
+          "abs_max": 0.0,
+          "abs_mean": 0.0,
+          "cand_absmax": 1.5795261859893799,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 1.5795261859893799,
+          "rel_max": 0.0,
+          "rel_mean": 0.0
+        },
+        "q": {
+          "abs_max": 0.0,
+          "abs_mean": 0.0,
+          "cand_absmax": 5.8830565308198857e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 5.8830565308198857e-08,
+          "rel_max": 0.0,
+          "rel_mean": 0.0
+        },
+        "v": {
+          "abs_max": 0.0,
+          "abs_mean": 0.0,
+          "cand_absmax": 9.491040486864222e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 9.491040486864222e-08,
+          "rel_max": 0.0,
+          "rel_mean": 0.0
+        }
+      },
+      "vs_observed": {
+        "k": {
+          "abs_max": 1.0827960750248167e-10,
+          "abs_mean": 6.612109406008149e-13,
+          "cand_absmax": 3.6855180240991103e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 3.67872416973114e-08,
+          "rel_max": 9.438158988952637,
+          "rel_mean": 0.0064176092855632305
+        },
+        "q": {
+          "abs_max": 1.29242483382086e-09,
+          "abs_mean": 2.2791355608342556e-11,
+          "cand_absmax": 5.8830565308198857e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 5.9138983488082886e-08,
+          "rel_max": 141.24037170410156,
+          "rel_mean": 0.07237453013658524
+        },
+        "v": {
+          "abs_max": 1.9807040628566084e+30,
+          "abs_mean": 1.2389573495509292e+25,
+          "cand_absmax": 9.491040486864222e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 1.9807040628566084e+30,
+          "rel_max": 14.319526672363281,
+          "rel_mean": 0.0035505329724401236
+        }
+      }
+    },
+    "sdpa_bf16": {
+      "catastrophic": false,
+      "reports": {
+        "k": {
+          "absmax": 3.67872416973114e-08,
+          "absmax_coord": [
+            27,
+            6,
+            108,
+            27
+          ],
+          "absmax_flat_index": 4326171,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 3.67872416973114e-08,
+          "mean": -7.429105751801182e-16,
+          "min": -2.9685907065868378e-08,
+          "name": "sdpa_bf16.k",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        },
+        "out": {
+          "absmax": 1.578125,
+          "absmax_coord": [
+            35,
+            1,
+            0,
+            38
+          ],
+          "absmax_flat_index": 143910,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 1.359375,
+          "mean": -0.013789322227239609,
+          "min": -1.578125,
+          "name": "sdpa_bf16.out",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "q": {
+          "absmax": 5.9138983488082886e-08,
+          "absmax_coord": [
+            27,
+            2,
+            6,
+            50
+          ],
+          "absmax_flat_index": 112050,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 5.075708031654358e-08,
+          "mean": -5.900320509955037e-11,
+          "min": -5.9138983488082886e-08,
+          "name": "sdpa_bf16.q",
+          "numel": 147456,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            8,
+            64
+          ]
+        },
+        "v": {
+          "absmax": 9.499490261077881e-08,
+          "absmax_coord": [
+            27,
+            3,
+            253,
+            34
+          ],
+          "absmax_flat_index": 4277090,
+          "catastrophic": false,
+          "dtype": "torch.bfloat16",
+          "finite": true,
+          "max": 9.499490261077881e-08,
+          "mean": -6.000470953448911e-12,
+          "min": -9.12696123123169e-08,
+          "name": "sdpa_bf16.v",
+          "numel": 5603328,
+          "present": true,
+          "shape": [
+            36,
+            8,
+            304,
+            64
+          ]
+        }
+      },
+      "vs_fp32": {
+        "k": {
+          "abs_max": 1.0827960750248167e-10,
+          "abs_mean": 6.612109406008149e-13,
+          "cand_absmax": 3.67872416973114e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 3.6855180240991103e-08,
+          "rel_max": 5.876718997955322,
+          "rel_mean": 0.006412719376385212
+        },
+        "out": {
+          "abs_max": 0.004164457321166992,
+          "abs_mean": 0.00048728991532698274,
+          "cand_absmax": 1.578125,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 1.5795261859893799,
+          "rel_max": 8.725571632385254,
+          "rel_mean": 0.0019505545496940613
+        },
+        "q": {
+          "abs_max": 1.29242483382086e-09,
+          "abs_mean": 2.2791355608342556e-11,
+          "cand_absmax": 5.9138983488082886e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 5.8830565308198857e-08,
+          "rel_max": 126.38529205322266,
+          "rel_mean": 0.07085679471492767
+        },
+        "v": {
+          "abs_max": 3.0119906568870647e-10,
+          "abs_mean": 3.378654127306202e-12,
+          "cand_absmax": 9.499490261077881e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 9.491040486864222e-08,
+          "rel_max": 4.934988975524902,
+          "rel_mean": 0.00227374117821455
+        }
+      },
+      "vs_observed": {
+        "k": {
+          "abs_max": 0.0,
+          "abs_mean": 0.0,
+          "cand_absmax": 3.67872416973114e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 3.67872416973114e-08,
+          "rel_max": 0.0,
+          "rel_mean": 0.0
+        },
+        "q": {
+          "abs_max": 0.0,
+          "abs_mean": 0.0,
+          "cand_absmax": 5.9138983488082886e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 5.9138983488082886e-08,
+          "rel_max": 0.0,
+          "rel_mean": 0.0
+        },
+        "v": {
+          "abs_max": 1.9807040628566084e+30,
+          "abs_mean": 1.2389573495509292e+25,
+          "cand_absmax": 9.499490261077881e-08,
+          "catastrophic_candidate": false,
+          "finite": true,
+          "present": true,
+          "ref_absmax": 1.9807040628566084e+30,
+          "rel_max": 14.368420600891113,
+          "rel_mean": 0.0012817119713872671
+        }
+      }
+    }
+  },
+  "device": "npu",
+  "input_reports": {
+    "dout": {
+      "absmax": 2.041459083557129e-06,
+      "absmax_coord": [
+        27,
+        6,
+        5,
+        58
+      ],
+      "absmax_flat_index": 114042,
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 2.041459083557129e-06,
+      "mean": -2.28054117257237e-10,
+      "min": -1.9669532775878906e-06,
+      "name": "sdpa_out.grad",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        8,
+        64
+      ]
+    },
+    "k": {
+      "absmax": 3.140625,
+      "absmax_coord": [
+        2,
+        4,
+        108,
+        53
+      ],
+      "absmax_flat_index": 396085,
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 2.703125,
+      "mean": -1.0378528259025188e-06,
+      "min": -3.140625,
+      "name": "sdpa_k",
+      "numel": 5603328,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        304,
+        64
+      ]
+    },
+    "q": {
+      "absmax": 2.140625,
+      "absmax_coord": [
+        35,
+        0,
+        0,
+        17
+      ],
+      "absmax_flat_index": 143377,
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 2.140625,
+      "mean": 0.0023407298140227795,
+      "min": -2.09375,
+      "name": "sdpa_q",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        8,
+        64
+      ]
+    },
+    "v": {
+      "absmax": 2.78125,
+      "absmax_coord": [
+        18,
+        0,
+        87,
+        6
+      ],
+      "absmax_flat_index": 2807238,
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 2.703125,
+      "mean": -0.013933209702372551,
+      "min": -2.78125,
+      "name": "sdpa_v",
+      "numel": 5603328,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        304,
+        64
+      ]
+    }
+  },
+  "observed_grad_reports": {
+    "k": {
+      "absmax": 3.67872416973114e-08,
+      "absmax_coord": [
+        27,
+        6,
+        108,
+        27
+      ],
+      "absmax_flat_index": 4326171,
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 3.67872416973114e-08,
+      "mean": -7.428838407027205e-16,
+      "min": -2.9685907065868378e-08,
+      "name": "observed.sdpa_k",
+      "numel": 5603328,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        304,
+        64
+      ]
+    },
+    "q": {
+      "absmax": 5.9138983488082886e-08,
+      "absmax_coord": [
+        27,
+        2,
+        6,
+        50
+      ],
+      "absmax_flat_index": 112050,
+      "catastrophic": false,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 5.075708031654358e-08,
+      "mean": -5.900319816065647e-11,
+      "min": -5.9138983488082886e-08,
+      "name": "observed.sdpa_q",
+      "numel": 147456,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        8,
+        64
+      ]
+    },
+    "v": {
+      "absmax": 1.9807040628566084e+30,
+      "absmax_coord": [
+        6,
+        2,
+        200,
+        55
+      ],
+      "absmax_flat_index": 985655,
+      "catastrophic": true,
+      "dtype": "torch.bfloat16",
+      "finite": true,
+      "max": 1.653887892485268e+30,
+      "mean": -3.4918386612535737e+24,
+      "min": -1.9807040628566084e+30,
+      "name": "observed.sdpa_v",
+      "numel": 5603328,
+      "present": true,
+      "shape": [
+        36,
+        8,
+        304,
+        64
+      ]
+    }
+  },
+  "recommendation": "sdpa_runtime_nondeterminism_or_corruption",
+  "recommendation_note": "Observed sdpa_v.grad absmax~1e30 while q/k grads and dout are tiny; isolated SDPA/explicit BF16/FP32 replays on the same (q,k,v,dout) all stay ~1e-7 and agree with each other. Attention math on these tensors is not inherently unstable."
+}
