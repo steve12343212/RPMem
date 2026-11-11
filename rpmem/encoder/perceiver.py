@@ -45,6 +45,37 @@ ACT2FN = {
 }
 
 
+def _npu_available() -> bool:
+    return bool(hasattr(torch, "npu") and torch.npu.is_available())
+
+
+def _env_flag(name: str, default: str = "0") -> bool:
+    return os.getenv(name, default).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def explicit_scaled_dot_product_attention(
+    query: Tensor,
+    key: Tensor,
+    value: Tensor,
+    *,
+    dropout_p: float = 0.0,
+    training: bool = False,
+) -> Tensor:
+    """Eager attention: ``softmax(QKᵀ/√d) V`` with optional dropout on weights.
+
+    Used on Ascend for Perceiver encoder cross-attention to avoid intermittent
+    fused-SDPA ``dV`` corruption observed in BF16 training.
+    """
+
+    head_dim = query.shape[-1]
+    scale = 1.0 / math.sqrt(head_dim)
+    scores = torch.matmul(query, key.transpose(-2, -1)) * scale
+    weights = torch.softmax(scores, dim=-1)
+    if dropout_p > 0.0 and training:
+        weights = F.dropout(weights, p=dropout_p)
+    return torch.matmul(weights, value)
+
+
 class RMSNorm(nn.Module):
     def __init__(self, hidden_size: int, eps: float = 1e-6):
         super().__init__()
@@ -96,16 +127,19 @@ class PerceiverAttention(nn.Module):
         self.v_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=False)
         self.o_proj = nn.Linear(self.num_heads * self.head_dim, self.hidden_size, bias=False)
         self.is_causal = False
-        # Flash-attn is CUDA-only; Ascend uses SDPA (see --no-use_flash_attn).
+        # Only encoder cross-attn layers opt into this on Ascend (see Perceiver).
+        self.use_explicit_cross_attn = False
+        # Flash-attn is CUDA-only; Ascend previously used SDPA (see --no-use_flash_attn).
         self.use_flash_attn = (
             FLASH_ATTN_AVAILABLE
             and torch.cuda.is_available()
-            and not (hasattr(torch, "npu") and torch.npu.is_available())
+            and not _npu_available()
             and os.getenv("RPMEM_PERCEIVER_FLASH_ATTN", os.getenv("MEMLORA_PERCEIVER_FLASH_ATTN", "0")) == "1"
         )
 
-    def _sdpa_forward(self, latents: Tensor, kv_inp: Tensor) -> Tensor:
-        """SDPA fallback path (no flash_attn dependency)."""
+    def _attention_core(self, latents: Tensor, kv_inp: Tensor, *, use_explicit: bool) -> Tensor:
+        """Shared QKV projection + attention + output projection."""
+
         bsz, q_len, _ = latents.shape
         kv_len = kv_inp.shape[1]
 
@@ -116,17 +150,26 @@ class PerceiverAttention(nn.Module):
         k = repeat_kv(k, self.num_key_value_groups)
         v = repeat_kv(v, self.num_key_value_groups)
 
+        dropout_p = self.attention_dropout if self.training else 0.0
+        if use_explicit:
+            attn_out = explicit_scaled_dot_product_attention(
+                q,
+                k,
+                v,
+                dropout_p=dropout_p,
+                training=self.training,
+            )
+        else:
+            attn_out = F.scaled_dot_product_attention(
+                q,
+                k,
+                v,
+                dropout_p=dropout_p,
+            )
+
         probe = getattr(self, "_branch_probe", None)
         block_id = getattr(self, "_branch_block_id", None)
-
-        attn_out = F.scaled_dot_product_attention(
-            q,
-            k,
-            v,
-            dropout_p=self.attention_dropout if self.training else 0.0,
-        )
         if probe is not None and block_id is not None:
-            # Capture q/k/v and the raw SDPA output (pre transpose/o_proj) for Exp-2.
             probe.register_sdpa_io(
                 int(block_id),
                 query=q,
@@ -136,6 +179,16 @@ class PerceiverAttention(nn.Module):
             )
         attn_out = attn_out.transpose(1, 2).contiguous().reshape(bsz, q_len, -1)
         return self.o_proj(attn_out)
+
+    def _sdpa_forward(self, latents: Tensor, kv_inp: Tensor) -> Tensor:
+        """Fused SDPA path (non-Ascend encoder-cross default / self-attn)."""
+
+        return self._attention_core(latents, kv_inp, use_explicit=False)
+
+    def _explicit_forward(self, latents: Tensor, kv_inp: Tensor) -> Tensor:
+        """Eager attention path for Ascend encoder cross-attn."""
+
+        return self._attention_core(latents, kv_inp, use_explicit=True)
 
     def _flash_forward(self, latents: Tensor, kv_inp: Tensor, **kwargs) -> Tensor:
         """Flash Attention 2 path."""
@@ -171,6 +224,9 @@ class PerceiverAttention(nn.Module):
         kv_inp = context if is_cross_attn else latents
         if self.use_flash_attn:
             return self._flash_forward(latents, kv_inp, **kwargs)
+        use_explicit = bool(is_cross_attn and self.use_explicit_cross_attn)
+        if use_explicit:
+            return self._explicit_forward(latents, kv_inp)
         return self._sdpa_forward(latents, kv_inp)
 
 
@@ -387,6 +443,16 @@ class Perceiver(nn.Module):
         )
         self.encoder = PerceiverResampler(encoder_config)
         self.decoder = PerceiverResampler(decoder_config)
+        # Ascend fused SDPA can intermittently return corrupt dV on encoder
+        # cross-attn; default to the validated explicit BF16 path there.
+        # Override with RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN=0/1.
+        enable_explicit = _env_flag(
+            "RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN",
+            default="1" if _npu_available() else "0",
+        )
+        for layer in self.encoder.layers:
+            if layer.is_cross_attn:
+                layer.self_attn.use_explicit_cross_attn = enable_explicit
 
     def forward(
         self,

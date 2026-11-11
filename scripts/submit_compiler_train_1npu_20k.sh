@@ -25,6 +25,11 @@ LOG_FILE="${LOG_DIR}/${JOB_NAME}.JOB.log"
 
 NAN_PROBE="${NAN_PROBE:-0}"
 NAN_PROBE_START_STEP="${NAN_PROBE_START_STEP:-430}"
+# Default on for Ascend encoder cross-attn fix; set 0 to A/B against fused SDPA.
+EXPLICIT_ENCODER_CROSS_ATTN="${RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN:-1}"
+# Optional early stop while keeping the original max_steps scheduler (e.g. 800 to clear ~460).
+PREFLIGHT_STOP_AFTER_STEP="${PREFLIGHT_STOP_AFTER_STEP:-}"
+SELECTED_ENDPOINT_STEP="${SELECTED_ENDPOINT_STEP:-}"
 
 RUN_CMD=$(cat <<EOF
 set -euo pipefail
@@ -36,6 +41,9 @@ export OUTPUT_DIR='${OUTPUT_DIR}'
 export LOG_NAME='${LOG_NAME}'
 export NAN_PROBE='${NAN_PROBE}'
 export NAN_PROBE_START_STEP='${NAN_PROBE_START_STEP}'
+export RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN='${EXPLICIT_ENCODER_CROSS_ATTN}'
+export PREFLIGHT_STOP_AFTER_STEP='${PREFLIGHT_STOP_AFTER_STEP}'
+export SELECTED_ENDPOINT_STEP='${SELECTED_ENDPOINT_STEP}'
 unset ASCEND_RT_VISIBLE_DEVICES
 unset PYTHON
 bash scripts/run_compiler_train_1npu_nan_repro.sh

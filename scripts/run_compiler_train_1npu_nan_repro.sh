@@ -32,6 +32,7 @@ fi
 
 echo "NAN_REPRO 1NPU CONFIG=$CONFIG DATA=$TRAIN_DATA TEACHER=$TEACHER_DIR OUT=$OUTPUT_DIR"
 echo "visible ASCEND_VISIBLE_DEVICES=${ASCEND_VISIBLE_DEVICES:-<unset>} ASCEND_RT_VISIBLE_DEVICES=${ASCEND_RT_VISIBLE_DEVICES:-<unset>}"
+echo "RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN=${RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN:-<unset>}"
 export DEVICE_KIND=npu
 
 EXTRA_ARGS=()
@@ -41,6 +42,12 @@ if [[ "${NAN_PROBE:-0}" == "1" ]]; then
   if [[ -n "${NAN_PROBE_JSONL:-}" ]]; then
     EXTRA_ARGS+=(--nan_probe_jsonl "$NAN_PROBE_JSONL")
   fi
+fi
+if [[ -n "${PREFLIGHT_STOP_AFTER_STEP:-}" ]]; then
+  EXTRA_ARGS+=(--preflight_stop_after_step "${PREFLIGHT_STOP_AFTER_STEP}")
+fi
+if [[ -n "${SELECTED_ENDPOINT_STEP:-}" ]]; then
+  EXTRA_ARGS+=(--selected_endpoint_step "${SELECTED_ENDPOINT_STEP}")
 fi
 
 "$PYTHON" -m accelerate.commands.launch \

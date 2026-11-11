@@ -11,6 +11,7 @@ ACCEL_CFG="${ACCEL_CFG:-$RPMEM_ROOT/configs/accelerate_8npu.yaml}"
 TRAIN_DATA="${TRAIN_DATA:-$RPMEM_ROOT/data/rpmem/compiler_20k/train.jsonl}"
 TEACHER_ROOT="${TEACHER_ROOT:-$RPMEM_ROOT/outputs/teacher_kvcache_20k}"
 OUTPUT_DIR="${OUTPUT_DIR:-$RPMEM_ROOT/outputs/compiler_qwen3_8b_npu_20k}"
+LOG_NAME="${LOG_NAME:-compiler_train_8npu_20k.log}"
 mkdir -p "$OUTPUT_DIR" "$RPMEM_ROOT/logs"
 
 # Resolve teacher dir: prefer TEACHER_ROOT itself, else TEACHER_ROOT/train.
@@ -34,6 +35,20 @@ if [[ "$NPU_COUNT" -lt 8 ]]; then
 fi
 
 export DEVICE_KIND=npu
+# Ascend encoder cross-attn fix (default on when unset).
+export RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN="${RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN:-1}"
+
+EXTRA_ARGS=()
+if [[ "${NAN_PROBE:-0}" == "1" ]]; then
+  EXTRA_ARGS+=(--nan_probe)
+  EXTRA_ARGS+=(--nan_probe_start_step "${NAN_PROBE_START_STEP:-0}")
+  if [[ -n "${NAN_PROBE_JSONL:-}" ]]; then
+    EXTRA_ARGS+=(--nan_probe_jsonl "$NAN_PROBE_JSONL")
+  fi
+fi
+
+echo "EXPLICIT_ENCODER_CROSS_ATTN=$RPMEM_PERCEIVER_EXPLICIT_ENCODER_CROSS_ATTN NAN_PROBE=${NAN_PROBE:-0} START=${NAN_PROBE_START_STEP:-0}"
+
 "$PYTHON" -m accelerate.commands.launch \
   --config_file "$ACCEL_CFG" \
   -m rpmem.training.train_hypernet \
@@ -44,6 +59,7 @@ export DEVICE_KIND=npu
   --ctx_encoder_path "$RPMEM_CTX_ENCODER" \
   --teacher_logprobs_dir "$TEACHER_DIR" \
   --no-use_flash_attn \
-  2>&1 | tee "$RPMEM_ROOT/logs/compiler_train_8npu_20k.log"
+  "${EXTRA_ARGS[@]}" \
+  2>&1 | tee "$RPMEM_ROOT/logs/$LOG_NAME"
 
 echo "DONE -> $OUTPUT_DIR"

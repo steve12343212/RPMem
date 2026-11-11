@@ -93,3 +93,12 @@ Per-block independent `projected` views + RMSNorm/SDPA K/V hooks on the isolate 
 
 On a failing block dump, isolated `explicit_fp32` / `explicit_bf16` are stable; **Ascend SDPA bf16 backward is intermittently catastrophic on the same `(q,k,v,dout)`** (observed `dv~1e30` while replay usually `~1e-7`). Recommendation: **replace Perceiver SDPA with explicit attention** (not whole-encoder FP32).
 
+## Explicit encoder cross-attn fix (`nan_probe_explicit_attn_validate`)
+
+Ascend Perceiver encoder cross-attn now defaults to explicit BF16 attention.
+Checkpoint-53 / sample-16890 regression: **20/20** magnitude-ok, `projected.grad`/`dV` stay `~1e-7` (no `1e30` blow-ups).
+
+## 1-NPU acceptance past ~460 (`nan_probe_explicit_attn_accept_1npu`)
+
+Original 20k 1-NPU config with explicit encoder cross-attn ran to step **1000** with **no NaN**.
+

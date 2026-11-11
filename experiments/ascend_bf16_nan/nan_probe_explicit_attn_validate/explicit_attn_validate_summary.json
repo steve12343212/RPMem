@@ -1,0 +1,13 @@
+{
+  "all_magnitude_ok": true,
+  "explicit_encoder_cross_attn_env": "1",
+  "magnitude_ok_count": 20,
+  "pass": true,
+  "projected_absmax_max": 7.217749953269958e-08,
+  "projected_absmax_min": 7.217749953269958e-08,
+  "repeats": 20,
+  "reproduced_catastrophic_count": 0,
+  "reproduced_nan_count": 0,
+  "sdpa_v_absmax_max": 9.499490261077881e-08,
+  "sdpa_v_absmax_min": 6.379559636116028e-08
+}
